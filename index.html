@@ -6,7 +6,7 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #0a1628; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #fff; min-height: 100vh; }
-
+ 
 .header { background: #0d1f35; padding: 16px; border-bottom: 1px solid #1e3a5f; }
 .players-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .player-block { flex: 1; }
@@ -22,17 +22,17 @@ body { background: #0a1628; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .dot.blank { background: #1e3a5f; }
 .match-info { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 .info-chip { font-size: 10px; color: #7a91aa; background: rgba(255,255,255,0.05); border-radius: 20px; padding: 3px 10px; }
-
+ 
 .section { margin: 10px; background: #0d1f35; border-radius: 12px; border: 1px solid #1e3a5f; padding: 14px; }
 .section-title { font-size: 10px; font-weight: 700; color: #4a7ab5; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
-
+ 
 .edge-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .edge-label { font-size: 11px; color: #7a91aa; flex: 1; }
 .edge-badge { font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 20px; max-width: 55%; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .edge-badge.fav { background: #1e3a5f; color: #60a5fa; }
 .edge-badge.dog { background: #2d1f3f; color: #c084fc; }
 .edge-badge.neutral { background: #1a2e45; color: #94a3b8; }
-
+ 
 .divider { height: 1px; background: #1e3a5f; margin: 10px 0; }
 .bar-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
 .bar-header-label { font-size: 9px; color: #4a7ab5; text-transform: uppercase; font-weight: 600; }
@@ -45,7 +45,7 @@ body { background: #0a1628; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .bar-track { height: 6px; border-radius: 3px; background: #1e3a5f; display: flex; overflow: hidden; }
 .bar-fill-fav { height: 100%; background: #2563eb; border-radius: 3px 0 0 3px; }
 .bar-fill-dog { height: 100%; background: #ef4444; border-radius: 0 3px 3px 0; margin-left: auto; }
-
+ 
 .three-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 10px; }
 .market-card { background: #0d1f35; border: 1px solid #1e3a5f; border-radius: 10px; padding: 10px; }
 .market-label { font-size: 9px; color: #4a7ab5; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
@@ -55,14 +55,14 @@ body { background: #0a1628; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .conf-mini-fill { height: 100%; border-radius: 2px; }
 .underdog-badge { display: inline-block; background: #f59e0b; color: #000; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 4px; }
 .proj-only { font-size: 10px; color: #94a3b8; font-style: italic; }
-
+ 
 .gen-wrap { padding: 4px 10px; }
 .gen-btn { width: 100%; background: #2563eb; color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
 .gen-btn:active { background: #1d4ed8; }
-
+ 
 .shape-badge { display: inline-block; background: #1e3a5f; color: #7dd3fc; font-size: 11px; padding: 4px 12px; border-radius: 20px; margin-bottom: 8px; }
 .analyst-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
-
+ 
 .ai-section { margin: 0 10px 10px; background: #0a2010; border: 1px solid #14532d; border-radius: 12px; padding: 14px; display: none; }
 .ai-section.visible { display: block; }
 .ai-label { font-size: 10px; color: #10b981; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
@@ -70,7 +70,7 @@ body { background: #0a1628; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 </style>
 </head>
 <body>
-
+ 
 <div class="header">
   <div class="players-row">
     <div class="player-block">
@@ -93,7 +93,7 @@ body { background: #0a1628; font-family: -apple-system, BlinkMacSystemFont, 'Seg
     <span class="info-chip" id="chip-time"></span>
   </div>
 </div>
-
+ 
 <div class="section">
   <div class="section-title">Why The Model Picked This</div>
   <div class="edge-row"><div class="edge-label">Surface Edge</div><div class="edge-badge neutral" id="b-surface"></div></div>
@@ -133,7 +133,7 @@ body { background: #0a1628; font-family: -apple-system, BlinkMacSystemFont, 'Seg
     <div class="bar-track"><div class="bar-fill-fav" id="bar-fav-df"></div><div class="bar-fill-dog" id="bar-dog-df"></div></div>
   </div>
 </div>
-
+ 
 <div class="three-cards">
   <div class="market-card">
     <div class="market-label">ML</div>
@@ -155,35 +155,35 @@ body { background: #0a1628; font-family: -apple-system, BlinkMacSystemFont, 'Seg
     <div class="conf-mini-track"><div class="conf-mini-fill" id="total-bar" style="background:#10b981"></div></div>
   </div>
 </div>
-
+ 
 <div class="gen-wrap">
   <button class="gen-btn" id="gen-btn">⚡ Generate AI Analysis</button>
 </div>
-
+ 
 <div class="ai-section" id="ai-out">
   <div class="ai-label">🤖 AI Analysis</div>
   <div class="ai-text" id="ai-text"></div>
 </div>
-
+ 
 <div class="section">
   <div class="section-title">Match Analysis</div>
   <div class="shape-badge" id="match-shape"></div>
   <div class="analyst-text" id="analyst-summary"></div>
 </div>
-
+ 
 <div style="height:20px"></div>
-
+ 
 <script>
 function p(key) {
   const val = new URLSearchParams(window.location.search).get(key) || '';
   return decodeURIComponent(val);
 }
-
+ 
 function setText(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
 }
-
+ 
 function setBar(favId, dogId, favVal, dogVal) {
   const fav = parseFloat(favVal) || 0;
   const dog = parseFloat(dogVal) || 0;
@@ -194,14 +194,14 @@ function setBar(favId, dogId, favVal, dogVal) {
   if (fe) fe.style.width = (fav/total*100).toFixed(1) + '%';
   if (de) de.style.width = (dog/total*100).toFixed(1) + '%';
 }
-
+ 
 function setConfBar(id, val, color) {
   const el = document.getElementById(id);
   if (!el) return;
   el.style.width = (parseFloat(val)||0)*10 + '%';
   if (color) el.style.background = color;
 }
-
+ 
 function renderLast5(containerId, str) {
   const el = document.getElementById(containerId);
   if (!el || !str) return;
@@ -212,7 +212,7 @@ function renderLast5(containerId, str) {
     el.appendChild(d);
   });
 }
-
+ 
 function colorBadge(id, val) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -226,11 +226,11 @@ function colorBadge(id, val) {
     el.className = 'edge-badge neutral';
   }
 }
-
+ 
 window.addEventListener('DOMContentLoaded', function() {
   const fav = p('fav');
   const dog = p('dog');
-
+ 
   setText('fav-name', fav);
   setText('dog-name', dog);
   setText('fav-bar-label', fav);
@@ -240,37 +240,37 @@ window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('chip-surface').textContent = p('surface');
   document.getElementById('chip-date').textContent = p('date');
   document.getElementById('chip-time').textContent = p('time');
-
+ 
   renderLast5('fav-last5', p('favlast5'));
   renderLast5('dog-last5', p('doglast5'));
-
+ 
   colorBadge('b-surface', p('surfaceedge'));
   colorBadge('b-serve', p('serveedge'));
   colorBadge('b-return', p('returnedge'));
   colorBadge('b-control', p('control'));
   colorBadge('b-bp', p('bpmarket'));
   colorBadge('b-chaos', p('chaos'));
-
+ 
   const fa = p('favaces'); const da = p('dogaces');
   setText('v-fav-aces', fa); setText('v-dog-aces', da);
   setBar('bar-fav-aces','bar-dog-aces', fa, da);
-
+ 
   const fb = p('favbp'); const db = p('dogbp');
   setText('v-fav-bp', fb); setText('v-dog-bp', db);
   setBar('bar-fav-bp','bar-dog-bp', fb, db);
-
+ 
   const fap = p('favaceprob'); const dap = p('dogaceprob');
   setText('v-fav-aceprob', fap); setText('v-dog-aceprob', dap);
   setBar('bar-fav-aceprob','bar-dog-aceprob', fap, dap);
-
+ 
   const fbp = p('favbpprob'); const dbp = p('dogbpprob');
   setText('v-fav-bpprob', fbp); setText('v-dog-bpprob', dbp);
   setBar('bar-fav-bpprob','bar-dog-bpprob', fbp, dbp);
-
+ 
   const fdf = p('favdf'); const ddf = p('dogdf');
   setText('v-fav-df', fdf); setText('v-dog-df', ddf);
   setBar('bar-fav-df','bar-dog-df', fdf, ddf);
-
+ 
   const mlPick = p('mlpick');
   const mlConf = p('mlconf');
   const isUnder = p('isunderdog').toLowerCase();
@@ -280,7 +280,7 @@ window.addEventListener('DOMContentLoaded', function() {
   if (isUnder === 'true' || isUnder === 'yes') {
     document.getElementById('underdog-wrap').innerHTML = '<div class="underdog-badge">⚡ UNDERDOG PICK</div>';
   }
-
+ 
   const spreadPick = p('spreadside');
   const hasSpread = p('hasspread');
   const spreadConf = p('spreadconf');
@@ -290,7 +290,7 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   setText('spread-conf', spreadConf + '/10');
   setConfBar('spread-bar', spreadConf, '#8b5cf6');
-
+ 
   const totalDir = p('totaldir');
   const hasTotal = p('hastotal');
   const totalConf = p('totalconf');
@@ -301,16 +301,16 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   setText('total-conf', totalConf + '/10');
   setConfBar('total-bar', totalConf, '#10b981');
-
+ 
   setText('match-shape', p('matchshape'));
   setText('analyst-summary', p('analyst'));
-
+ 
   const pickReason = p('pickreason');
   if (pickReason && pickReason.length > 10) {
     setText('ai-text', pickReason);
     document.getElementById('ai-out').classList.add('visible');
   }
-
+ 
   document.getElementById('gen-btn').addEventListener('click', function() {
     if (window.parent) {
       window.parent.postMessage({type: 'glide:action', action: 'generate-pick'}, '*');
