@@ -312,10 +312,12 @@ window.addEventListener('DOMContentLoaded', function() {
   }
  
   document.getElementById('gen-btn').addEventListener('click', function() {
-    if (window.parent) {
-      window.parent.postMessage({type: 'glide:action', action: 'generate-pick'}, '*');
-    }
-  });
+    window.parent.postMessage('generate', '*');
+    window.top.postMessage('generate', '*');
+    // Try all possible Glide message formats
+    window.parent.postMessage({action: 'buttonClick'}, '*');
+    window.parent.postMessage({type: 'action'}, '*');
+});
 });
 </script>
 </body>
