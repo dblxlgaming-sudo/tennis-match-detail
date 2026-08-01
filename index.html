@@ -108,6 +108,10 @@ body{
   color:#6f87a3;font-size:9px;text-transform:uppercase;gap:4px
 }
 
+.probability-card{display:flex;flex-direction:column;justify-content:space-between}
+.probability-block{min-width:0}
+.probability-divider{height:1px;background:var(--line2);margin:16px 0}
+
 /* why + market */
 .data-row{
   display:flex;align-items:center;justify-content:space-between;
@@ -285,19 +289,39 @@ body{
 <!-- OVERVIEW -->
 <main id="overview-panel" class="panel active">
   <div class="overview-top">
-    <section class="overview-card">
-      <div class="card-title">Model Win Probability</div>
-      <div class="winprob-values">
-        <span class="winprob-val a-text" id="v-fav-winprob"></span>
-        <span class="winprob-val b-text" id="v-dog-winprob"></span>
+    <section class="overview-card probability-card">
+      <div class="probability-block">
+        <div class="card-title">Model Win Probability</div>
+        <div class="winprob-values">
+          <span class="winprob-val a-text" id="v-fav-modelprob"></span>
+          <span class="winprob-val b-text" id="v-dog-modelprob"></span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-a" id="bar-fav-modelprob"></div>
+          <div class="bar-b" id="bar-dog-modelprob"></div>
+        </div>
+        <div class="names-mini">
+          <span id="mini-fav-modelprob"></span>
+          <span id="mini-dog-modelprob"></span>
+        </div>
       </div>
-      <div class="bar-track">
-        <div class="bar-a" id="bar-fav-winprob"></div>
-        <div class="bar-b" id="bar-dog-winprob"></div>
-      </div>
-      <div class="names-mini">
-        <span id="mini-fav-winprob"></span>
-        <span id="mini-dog-winprob"></span>
+
+      <div class="probability-divider"></div>
+
+      <div class="probability-block">
+        <div class="card-title">No-Vig Win Probability</div>
+        <div class="winprob-values">
+          <span class="winprob-val a-text" id="v-fav-winprob"></span>
+          <span class="winprob-val b-text" id="v-dog-winprob"></span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-a" id="bar-fav-winprob"></div>
+          <div class="bar-b" id="bar-dog-winprob"></div>
+        </div>
+        <div class="names-mini">
+          <span id="mini-fav-winprob"></span>
+          <span id="mini-dog-winprob"></span>
+        </div>
       </div>
     </section>
 
@@ -657,11 +681,29 @@ window.addEventListener("DOMContentLoaded",()=>{
   renderLast5("fav-last5",p("favlast5"));
   renderLast5("dog-last5",p("doglast5"));
 
-  setText("v-fav-winprob",fmtPct(p("favwinprob")));
-  setText("v-dog-winprob",fmtPct(p("dogwinprob")));
-  setBar("bar-fav-winprob","bar-dog-winprob",p("favwinprob"),p("dogwinprob"));
+  // Existing favwinprob/dogwinprob parameters remain the market no-vig pair.
+  const noVigFav=p("favwinprob");
+  const noVigDog=p("dogwinprob");
+  setText("v-fav-winprob",fmtPct(noVigFav));
+  setText("v-dog-winprob",fmtPct(noVigDog));
+  setBar("bar-fav-winprob","bar-dog-winprob",noVigFav,noVigDog);
   setText("mini-fav-winprob",fav);
   setText("mini-dog-winprob",dog);
+
+  // Derive the two-sided model pair from mlpick + mlmodelprob.
+  const modelPick=p("mlpick");
+  const modelPickedProb=num(p("mlmodelprob"));
+  let modelFav=null,modelDog=null;
+  if(modelPickedProb!==null){
+    const q=Math.abs(modelPickedProb)<=1.5?modelPickedProb:modelPickedProb/100;
+    if(modelPick.trim().toLowerCase()===fav.trim().toLowerCase()){modelFav=q;modelDog=1-q}
+    else if(modelPick.trim().toLowerCase()===dog.trim().toLowerCase()){modelDog=q;modelFav=1-q}
+  }
+  setText("v-fav-modelprob",modelFav===null?"—":fmtPct(modelFav));
+  setText("v-dog-modelprob",modelDog===null?"—":fmtPct(modelDog));
+  setBar("bar-fav-modelprob","bar-dog-modelprob",modelFav===null?0:modelFav,modelDog===null?0:modelDog);
+  setText("mini-fav-modelprob",fav);
+  setText("mini-dog-modelprob",dog);
 
   colorBadge("b-surface",p("surfaceedge"));
   colorBadge("b-base",p("basecontrol"));
