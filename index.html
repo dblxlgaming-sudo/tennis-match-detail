@@ -1,876 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Triple Threat Match Detail</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triple Threat Edge Mobile Mockup</title>
 <style>
 :root{
   --bg:#071426;
   --panel:#0d1f35;
-  --panel2:#081a2e;
   --line:#214369;
   --line2:#18304b;
   --muted:#92a4b8;
   --label:#5b87c4;
-  --a:#F59E0B;
-  --b:#EC4899;
-  --high:#22C55E;
-  --mid:#FACC15;
-  --low:#EF4444;
+  --amber:#F59E0B;
+  --rose:#EC4899;
+  --green:#22C55E;
+  --yellow:#FACC15;
+  --red:#EF4444;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
 body{
-  background:var(--bg);
+  margin:0;
+  background:#020914;
   color:#fff;
-  min-height:100vh;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-.hidden{display:none!important}
-.header{
-  background:var(--panel);
   padding:16px;
-  border-bottom:1px solid #1e3a5f;
 }
-.players-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.player-block{flex:1;min-width:0}
-.player-block.right{text-align:right}
-.player-label{
-  font-size:10px;color:var(--label);text-transform:uppercase;
-  letter-spacing:1.6px;margin-bottom:5px
+.wrap{
+  max-width:420px;
+  margin:0 auto;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
 }
-.player-name{font-size:18px;font-weight:800;line-height:1.15}
-.player-a{color:var(--a)}
-.player-b{color:var(--b)}
-.vs-block{font-size:12px;color:var(--label);padding-top:28px;flex-shrink:0}
-.last5{display:flex;gap:4px;margin-top:7px;flex-wrap:wrap}
-.last5.right{justify-content:flex-end}
-.dot-result{
-  width:17px;height:17px;border-radius:50%;font-size:9px;font-weight:800;
-  display:flex;align-items:center;justify-content:center
+.header{
+  padding:14px 16px 10px;
+  background:#0a1728;
+  border-bottom:1px solid var(--line);
 }
-.dot-result.W{background:#10b981}
-.dot-result.L{background:#ef4444}
-.dot-result.blank{background:#24405f}
-.match-info{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap}
-.info-chip{
-  font-size:11px;color:#8fa3bc;background:rgba(255,255,255,.06);
-  border-radius:20px;padding:5px 11px
+.title{
+  font-size:18px;
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
-
-/* tabs */
+.meta{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:11px;
+}
 .tabs{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  background:var(--panel2);
+  background:#081a2e;
   border-bottom:1px solid var(--line);
 }
 .tab{
-  appearance:none;border:0;background:transparent;color:#8fa3bc;
-  padding:14px 8px;font-size:13px;font-weight:700;cursor:pointer;
-  border-bottom:3px solid transparent;
+  text-align:center;
+  padding:12px 4px;
+  color:#8fa3bc;
+  font-size:12px;
+  font-weight:700;
 }
-.tab.active{color:#fff;background:var(--panel);border-bottom-color:var(--a)}
-.panel{display:none}
-.panel.active{display:block}
-
-/* shared cards */
+.tab.active{
+  color:#fff;
+  border-bottom:3px solid var(--amber);
+  background:#0d1f35;
+}
 .section{
-  margin:10px;background:var(--panel);border-radius:14px;
-  border:1px solid var(--line);padding:14px
+  margin:12px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
 }
 .section-title{
-  font-size:11px;font-weight:800;color:var(--label);
-  text-transform:uppercase;letter-spacing:1.7px;margin-bottom:12px
+  color:var(--label);
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin-bottom:8px;
 }
-.overview-top{
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px
+.edge-row{
+  padding:14px 0;
+  border-bottom:1px solid var(--line2);
 }
-.overview-card{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:14px;padding:14px;min-width:0
+.edge-row:last-child{border-bottom:none}
+.market{
+  color:var(--label);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:8px;
 }
-.card-title{
-  font-size:10px;color:var(--label);text-transform:uppercase;
-  letter-spacing:1.2px;margin-bottom:10px
+.topline{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 112px;
+  gap:12px;
+  align-items:start;
 }
-
-/* win probability */
-.winprob-values{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 10px}
-.winprob-val{font-size:25px;font-weight:850}
-.bar-track{
-  height:7px;border-radius:4px;background:#1e3a5f;display:flex;overflow:hidden
+.pick{
+  font-size:18px;
+  font-weight:800;
+  line-height:1.2;
 }
-.bar-a{height:100%;background:var(--a)}
-.bar-b{height:100%;background:var(--b);margin-left:auto}
-.names-mini{
-  display:flex;justify-content:space-between;margin-top:6px;
-  color:#6f87a3;font-size:9px;text-transform:uppercase;gap:4px
+.fair-card{
+  background:#10243d;
+  border:1px solid var(--amber);
+  border-radius:10px;
+  text-align:center;
+  padding:9px 8px;
 }
-
-.probability-card{display:flex;flex-direction:column;justify-content:space-between}
-.probability-block{min-width:0}
-.probability-divider{height:1px;background:var(--line2);margin:16px 0}
-
-/* why + market */
-.data-row{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:10px;padding:9px 0;border-bottom:1px solid var(--line2)
+.fair-label{
+  color:#8fa3bc;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
-.data-row:last-child{border-bottom:0}
-.data-label{font-size:13px;color:#d7e0eb}
-.data-value{font-size:12px;font-weight:750;text-align:right}
-.edge-badge{
-  font-size:11px;font-weight:750;padding:5px 10px;border-radius:20px;
-  max-width:65%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+.fair-value{
+  margin-top:3px;
+  font-size:18px;
+  font-weight:850;
+  color:#fff;
 }
-.edge-badge.a{background:rgba(245,158,11,.14);color:#ffd37d;border:1px solid rgba(245,158,11,.28)}
-.edge-badge.b{background:rgba(236,72,153,.14);color:#ff9acb;border:1px solid rgba(236,72,153,.28)}
-.edge-badge.neutral{background:#1b314a;color:#a8b6c6;border:1px solid #2a4668}
-
-/* control stats: no bars */
-.control-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:0 24px
+.stat-strip{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:12px;
 }
-.control-row{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:12px;padding:12px 0;border-bottom:1px solid var(--line2)
+.stat{
+  background:#081a2e;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:8px 6px;
+  text-align:center;
 }
-.control-row:nth-last-child(-n+2){border-bottom:0}
-.control-name{font-size:13px;color:#d7e0eb}
-.control-values{font-size:13px;font-weight:800;white-space:nowrap}
-.a-text{color:var(--a)}
-.b-text{color:var(--b)}
-
-/* props */
-.prop-grid{
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
 }
-.prop-card{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:14px;padding:12px;min-width:0
+.stat-value{
+  margin-top:3px;
+  font-size:14px;
+  font-weight:800;
 }
-.prop-label{
-  font-size:10px;color:var(--label);text-transform:uppercase;
-  letter-spacing:1.2px;text-align:center;margin-bottom:10px
+.bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  margin-top:12px;
 }
-.player-panels{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.player-panel{
-  background:var(--panel2);border:1px solid var(--line);
-  border-radius:10px;padding:10px;min-width:0
+.tier{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:lowercase;
 }
-.player-panel-name{
-  font-size:9px;color:var(--muted);text-transform:uppercase;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:7px
+.edge{
+  font-size:24px;
+  font-weight:900;
 }
-.projection{font-size:20px;font-weight:850;line-height:1}
-.projection-label{font-size:9px;color:var(--muted);margin-top:4px}
-.direction{
-  display:flex;align-items:center;gap:8px;margin-top:10px;
-  font-size:11px;font-weight:850;color:#eef2f7
-}
-.direction::before{content:"";width:4px;height:25px;border-radius:2px;flex:0 0 4px}
-.direction.a::before{background:var(--a)}
-.direction.b::before{background:var(--b)}
-.confidence{
-  display:flex;align-items:center;gap:6px;margin-top:10px;
-  font-size:10px;font-weight:750;color:#d9e2ef
-}
-.conf-dot{width:9px;height:9px;border-radius:50%;flex:0 0 9px}
-.conf-dot.high{background:var(--high)}
-.conf-dot.mid{background:var(--mid)}
-.conf-dot.low{background:var(--low)}
-
-/* edge */
-.edge-market-row{
-  display:grid;grid-template-columns:90px minmax(0,1fr) 100px;
-  gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line2)
-}
-.edge-market-row:last-child{border-bottom:0}
-.edge-market-name{font-size:11px;color:var(--label);text-transform:uppercase;letter-spacing:1px}
-.edge-pick{font-size:14px;font-weight:800}
-.edge-sub{font-size:10px;color:var(--muted);margin-top:4px}
-.edge-right{text-align:right}
-.edge-tier{font-size:10px;color:var(--muted)}
-.edge-number{font-size:17px;font-weight:850;margin-top:2px}
-.edge-number.good{color:var(--high)}
-.edge-number.mid{color:var(--mid)}
-.edge-number.bad{color:var(--low)}
-.fair-box{
-  margin-top:8px;display:inline-block;font-size:10px;color:#cbd7e6;
-  background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:4px 7px
-}
-
-/* H2H */
-.h2h-summary{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px
-}
-.h2h-stat{
-  background:var(--panel2);border:1px solid var(--line);
-  border-radius:10px;padding:10px;text-align:center
-}
-.h2h-stat-label{
-  font-size:9px;color:var(--label);text-transform:uppercase;letter-spacing:1px
-}
-.h2h-stat-value{font-size:20px;font-weight:850;margin-top:4px}
-.h2h-row{
-  display:grid;grid-template-columns:125px minmax(0,1fr) 110px;
-  gap:10px;padding:11px 0;border-bottom:1px solid var(--line2)
-}
-.h2h-row:last-child{border-bottom:0}
-.h2h-meta{font-size:10px;color:var(--muted)}
-.h2h-main{font-size:13px;font-weight:750}
-.h2h-score{font-size:10px;color:var(--muted);margin-top:3px}
-.h2h-winner{text-align:right;font-size:12px;font-weight:800}
-.empty{
-  padding:30px 10px;text-align:center;color:var(--muted);
-  background:var(--panel2);border:1px dashed var(--line);border-radius:10px
-}
-
-
-/* integrated H2H */
-.h2h-record-card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.h2h-player-col{flex:1;text-align:center;min-width:0}.h2h-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;margin:0 auto 6px}
-.h2h-avatar.a{background:rgba(245,158,11,.18);color:var(--a);border:1px solid rgba(245,158,11,.35)}.h2h-avatar.b{background:rgba(236,72,153,.18);color:var(--b);border:1px solid rgba(236,72,153,.35)}
-.h2h-player-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.h2h-record-mid{text-align:center;padding:0 10px}.h2h-record-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}.h2h-record-score{font-size:20px;font-weight:850;margin-top:3px}
-.h2h-tabs{display:flex;gap:8px;margin-bottom:12px}.h2h-surface-tab{flex:1;border:1px solid var(--line);background:var(--panel2);color:#fff;border-radius:8px;padding:8px 5px;font-size:12px;cursor:pointer}.h2h-surface-tab span{color:var(--muted);margin-left:3px}.h2h-surface-tab.active{border-color:var(--a);background:rgba(245,158,11,.10)}.h2h-surface-tab.empty{opacity:.42;cursor:default}
-.h2h-surface-panel{display:none}.h2h-surface-panel.active{display:block}.h2h-meeting-card{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px;margin-bottom:9px}.h2h-meeting-summary{appearance:none;border:0;background:transparent;color:#fff;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0;cursor:pointer;text-align:left}.h2h-meeting-meta{font-size:11px;color:var(--muted)}.h2h-meeting-score{font-size:12px;font-weight:800;text-align:right}.h2h-detail{display:none;margin-top:10px}.h2h-detail.open{display:block}
-.h2h-stat-table{width:100%;border-collapse:collapse;font-size:12px}.h2h-stat-table th{font-weight:600;color:var(--muted);text-align:center;padding:5px 3px}.h2h-stat-table td{padding:6px 3px;border-top:1px solid var(--line2)}.h2h-stat-table td:first-child{color:var(--muted)}.h2h-stat-table td:not(:first-child){text-align:center}
-
-
-/* compact mobile header */
-.mobile-header{display:none}
-.mobile-match-title{
-  font-size:15px;font-weight:850;text-align:center;white-space:nowrap;
-  overflow:hidden;text-overflow:ellipsis;color:#fff
-}
-.mobile-form-row{
-  display:flex;justify-content:space-between;align-items:center;gap:10px;
-  margin-top:8px
-}
-.mobile-form-side{display:flex;gap:4px;min-width:0}
-.mobile-meta{
-  margin-top:8px;text-align:center;color:var(--muted);font-size:11px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
-}
-
-/* mobile collapsible cards */
-.collapse-toggle{
-  width:100%;appearance:none;border:0;background:transparent;color:inherit;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:0;text-align:left;cursor:default
-}
-.collapse-toggle .card-title,.collapse-toggle .section-title{margin-bottom:0}
-.collapse-chevron{display:none;color:var(--muted);font-size:12px;transition:transform .18s ease}
-.collapse-content{display:block}
-.mobile-collapsible.collapsed .collapse-content{display:block}
-.mobile-collapsible.collapsed .collapse-chevron{transform:rotate(-90deg)}
-
-@media(max-width:760px){
-  .header{padding:11px 14px}
-  .desktop-header{display:none}
-  .mobile-header{display:block}
-  .overview-top,.prop-grid{grid-template-columns:1fr}
-  .overview-top{margin:8px}
-  .overview-card,.section{padding:12px}
-  .section{margin:8px}
-  .control-grid{grid-template-columns:1fr 1fr;gap:0 12px}
-  .tab{font-size:12px;padding:11px 5px}
-  .edge-market-row,.h2h-row{grid-template-columns:1fr}
-  .edge-right,.h2h-winner{text-align:left}
-  .collapse-toggle{cursor:pointer}
-  .collapse-chevron{display:block}
-  .mobile-collapsible.collapsed .collapse-content{display:none}
-  .mobile-collapsible .card-title,.mobile-collapsible .section-title{margin-bottom:0}
-  .mobile-collapsible:not(.collapsed) .collapse-content{margin-top:10px}
-}
-@media(max-width:430px){
-  .player-name{font-size:16px}
-  .control-name{font-size:11px}
-  .control-values{font-size:11px}
-  .player-panel{padding:8px}
-  .projection{font-size:18px}
-  .direction{font-size:10px}
+.good{color:var(--green)}
+.mid{color:var(--yellow)}
+.bad{color:var(--red)}
+.note{
+  max-width:420px;
+  margin:12px auto 0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
 }
 </style>
 </head>
 <body>
-
-<header class="header">
-  <div class="desktop-header">
-    <div class="players-row">
-      <div class="player-block">
-        <div class="player-label">Player A</div>
-        <div class="player-name player-a" id="fav-name"></div>
-        <div class="last5" id="fav-last5"></div>
-      </div>
-      <div class="vs-block">VS</div>
-      <div class="player-block right">
-        <div class="player-label">Player B</div>
-        <div class="player-name player-b" id="dog-name"></div>
-        <div class="last5 right" id="dog-last5"></div>
-      </div>
-    </div>
-    <div class="match-info">
-      <span class="info-chip" id="chip-tournament"></span>
-      <span class="info-chip" id="chip-round"></span>
-      <span class="info-chip" id="chip-surface"></span>
-      <span class="info-chip" id="chip-date"></span>
-      <span class="info-chip" id="chip-time"></span>
-    </div>
+<div class="wrap">
+  <div class="header">
+    <div class="title">Diana Shnaider vs Liudmila Samsonova</div>
+    <div class="meta">Washington · Hard · QF</div>
   </div>
 
-  <div class="mobile-header">
-    <div class="mobile-match-title" id="mobile-match-title"></div>
-    <div class="mobile-form-row">
-      <div class="mobile-form-side" id="mobile-fav-last5"></div>
-      <div class="mobile-form-side" id="mobile-dog-last5"></div>
-    </div>
-    <div class="mobile-meta" id="mobile-meta"></div>
-  </div>
-</header>
-
-<nav class="tabs" aria-label="Match detail sections">
-  <button class="tab active" data-panel="overview-panel">Overview</button>
-  <button class="tab" data-panel="props-panel">Props</button>
-  <button class="tab" data-panel="edge-panel">Edge</button>
-  <button class="tab" data-panel="h2h-panel">H2H</button>
-</nav>
-
-<!-- OVERVIEW -->
-<main id="overview-panel" class="panel active">
-  <div class="overview-top">
-    <section class="overview-card probability-card">
-      <div class="probability-block">
-        <div class="card-title">Model Win Probability</div>
-        <div class="winprob-values">
-          <span class="winprob-val a-text" id="v-fav-modelprob"></span>
-          <span class="winprob-val b-text" id="v-dog-modelprob"></span>
-        </div>
-        <div class="bar-track">
-          <div class="bar-a" id="bar-fav-modelprob"></div>
-          <div class="bar-b" id="bar-dog-modelprob"></div>
-        </div>
-        <div class="names-mini">
-          <span id="mini-fav-modelprob"></span>
-          <span id="mini-dog-modelprob"></span>
-        </div>
-      </div>
-
-      <div class="probability-divider"></div>
-
-      <div class="probability-block">
-        <div class="card-title">No-Vig Win Probability</div>
-        <div class="winprob-values">
-          <span class="winprob-val a-text" id="v-fav-winprob"></span>
-          <span class="winprob-val b-text" id="v-dog-winprob"></span>
-        </div>
-        <div class="bar-track">
-          <div class="bar-a" id="bar-fav-winprob"></div>
-          <div class="bar-b" id="bar-dog-winprob"></div>
-        </div>
-        <div class="names-mini">
-          <span id="mini-fav-winprob"></span>
-          <span id="mini-dog-winprob"></span>
-        </div>
-      </div>
-    </section>
-
-    <section class="overview-card mobile-collapsible collapsed" id="why-card">
-      <button class="collapse-toggle" type="button" aria-expanded="false">
-        <div class="card-title">Why The Model Picked This</div>
-        <span class="collapse-chevron">▼</span>
-      </button>
-      <div class="collapse-content">
-        <div class="data-row"><span class="data-label">Surface Edge</span><span class="edge-badge neutral" id="b-surface"></span></div>
-        <div class="data-row"><span class="data-label">Base Control</span><span class="edge-badge neutral" id="b-base"></span></div>
-        <div class="data-row"><span class="data-label">Serve Profile</span><span class="edge-badge neutral" id="b-serve"></span></div>
-        <div class="data-row"><span class="data-label">Return Profile</span><span class="edge-badge neutral" id="b-return"></span></div>
-        <div class="data-row"><span class="data-label">Chaos Flag</span><span class="edge-badge neutral" id="b-chaos"></span></div>
-      </div>
-    </section>
-
-    <section class="overview-card">
-      <div class="card-title">Market Calls</div>
-      <div class="data-row"><span class="data-label">ML</span><span class="data-value" id="ml-pick"></span></div>
-      <div class="data-row"><span class="data-label">Spread</span><span class="data-value" id="spread-pick"></span></div>
-      <div class="data-row"><span class="data-label">Total</span><span class="data-value" id="total-pick"></span></div>
-    </section>
+  <div class="tabs">
+    <div class="tab">Overview</div>
+    <div class="tab">Props</div>
+    <div class="tab active">Edge</div>
+    <div class="tab">H2H</div>
   </div>
 
-  <section class="section mobile-collapsible collapsed" id="control-card">
-    <button class="collapse-toggle" type="button" aria-expanded="false">
-      <div class="section-title">Control Stats</div>
-      <span class="collapse-chevron">▼</span>
-    </button>
-    <div class="collapse-content">
-    <div class="control-grid">
-      <div class="control-row"><span class="control-name">Total Points Won %</span><span class="control-values"><span class="a-text" id="v-fav-tpw"></span> / <span class="b-text" id="v-dog-tpw"></span></span></div>
-      <div class="control-row"><span class="control-name">Hold %</span><span class="control-values"><span class="a-text" id="v-fav-hold"></span> / <span class="b-text" id="v-dog-hold"></span></span></div>
-      <div class="control-row"><span class="control-name">Break %</span><span class="control-values"><span class="a-text" id="v-fav-break"></span> / <span class="b-text" id="v-dog-break"></span></span></div>
-      <div class="control-row"><span class="control-name">Dominance Ratio</span><span class="control-values"><span class="a-text" id="v-fav-dr"></span> / <span class="b-text" id="v-dog-dr"></span></span></div>
-      <div class="control-row"><span class="control-name">Second Serve Won %</span><span class="control-values"><span class="a-text" id="v-fav-2ndwon"></span> / <span class="b-text" id="v-dog-2ndwon"></span></span></div>
-      <div class="control-row"><span class="control-name">Break Points Saved</span><span class="control-values"><span class="a-text" id="v-fav-bpsaved"></span> / <span class="b-text" id="v-dog-bpsaved"></span></span></div>
-    </div>
-    </div>
-  </section>
-</main>
-
-<!-- PROPS -->
-<section id="props-panel" class="panel">
-  <div class="prop-grid">
-    <article class="prop-card">
-      <div class="prop-label">Aces</div>
-      <div class="player-panels">
-        <div class="player-panel">
-          <div class="player-panel-name" id="prop-fav-name-aces"></div>
-          <div class="projection a-text" id="v-fav-aces"></div>
-          <div class="projection-label">Projected Aces</div>
-          <div class="direction a" id="fav-ace-direction"></div>
-          <div class="confidence"><span class="conf-dot" id="fav-ace-dot"></span><span id="fav-ace-conf"></span></div>
-        </div>
-        <div class="player-panel">
-          <div class="player-panel-name" id="prop-dog-name-aces"></div>
-          <div class="projection b-text" id="v-dog-aces"></div>
-          <div class="projection-label">Projected Aces</div>
-          <div class="direction b" id="dog-ace-direction"></div>
-          <div class="confidence"><span class="conf-dot" id="dog-ace-dot"></span><span id="dog-ace-conf"></span></div>
-        </div>
-      </div>
-    </article>
-
-    <article class="prop-card">
-      <div class="prop-label">Break Points Won</div>
-      <div class="player-panels">
-        <div class="player-panel">
-          <div class="player-panel-name" id="prop-fav-name-bp"></div>
-          <div class="projection a-text" id="v-fav-bp"></div>
-          <div class="projection-label">Projected BP Won</div>
-          <div class="direction a" id="fav-bp-direction"></div>
-          <div class="confidence"><span class="conf-dot" id="fav-bp-dot"></span><span id="fav-bp-conf"></span></div>
-        </div>
-        <div class="player-panel">
-          <div class="player-panel-name" id="prop-dog-name-bp"></div>
-          <div class="projection b-text" id="v-dog-bp"></div>
-          <div class="projection-label">Projected BP Won</div>
-          <div class="direction b" id="dog-bp-direction"></div>
-          <div class="confidence"><span class="conf-dot" id="dog-bp-dot"></span><span id="dog-bp-conf"></span></div>
-        </div>
-      </div>
-    </article>
-
-    <article class="prop-card">
-      <div class="prop-label">Double Faults</div>
-      <div class="player-panels">
-        <div class="player-panel">
-          <div class="player-panel-name" id="prop-fav-name-df"></div>
-          <div class="projection a-text" id="v-fav-df"></div>
-          <div class="projection-label">Projected Double Faults</div>
-          <div class="direction a" id="fav-df-direction"></div>
-          <div class="confidence"><span class="conf-dot" id="fav-df-dot"></span><span id="fav-df-conf"></span></div>
-        </div>
-        <div class="player-panel">
-          <div class="player-panel-name" id="prop-dog-name-df"></div>
-          <div class="projection b-text" id="v-dog-df"></div>
-          <div class="projection-label">Projected Double Faults</div>
-          <div class="direction b" id="dog-df-direction"></div>
-          <div class="confidence"><span class="conf-dot" id="dog-df-dot"></span><span id="dog-df-conf"></span></div>
-        </div>
-      </div>
-    </article>
-  </div>
-</section>
-
-<!-- EDGE -->
-<section id="edge-panel" class="panel">
   <div class="section">
     <div class="section-title">Breakeven Edge View</div>
-    <div id="edge-rows"></div>
+
+    <div class="edge-row">
+      <div class="market">ML</div>
+      <div class="topline">
+        <div class="pick">Diana Shnaider</div>
+        <div class="fair-card">
+          <div class="fair-label">Fair Odds</div>
+          <div class="fair-value">-109</div>
+        </div>
+      </div>
+      <div class="stat-strip">
+        <div class="stat"><div class="stat-label">Breakeven</div><div class="stat-value">56.1%</div></div>
+        <div class="stat"><div class="stat-label">Model</div><div class="stat-value">52.0%</div></div>
+        <div class="stat"><div class="stat-label">Conf</div><div class="stat-value">3.5</div></div>
+      </div>
+      <div class="bottom">
+        <div class="tier">avoid</div>
+        <div class="edge bad">-1.5%</div>
+      </div>
+    </div>
+
+    <div class="edge-row">
+      <div class="market">Spread</div>
+      <div class="topline">
+        <div class="pick">Liudmila Samsonova +1.5</div>
+        <div class="fair-card">
+          <div class="fair-label">Fair Odds</div>
+          <div class="fair-value">-220</div>
+        </div>
+      </div>
+      <div class="stat-strip">
+        <div class="stat"><div class="stat-label">Breakeven</div><div class="stat-value">56.5%</div></div>
+        <div class="stat"><div class="stat-label">Model</div><div class="stat-value">68.7%</div></div>
+        <div class="stat"><div class="stat-label">Conf</div><div class="stat-value">4.4</div></div>
+      </div>
+      <div class="bottom">
+        <div class="tier">take</div>
+        <div class="edge good">17.3%</div>
+      </div>
+    </div>
+
+    <div class="edge-row">
+      <div class="market">Total</div>
+      <div class="topline">
+        <div class="pick">Over 22.5</div>
+        <div class="fair-card">
+          <div class="fair-label">Fair Odds</div>
+          <div class="fair-value">-141</div>
+        </div>
+      </div>
+      <div class="stat-strip">
+        <div class="stat"><div class="stat-label">Breakeven</div><div class="stat-value">53.5%</div></div>
+        <div class="stat"><div class="stat-label">Model</div><div class="stat-value">58.6%</div></div>
+        <div class="stat"><div class="stat-label">Conf</div><div class="stat-value">8.6</div></div>
+      </div>
+      <div class="bottom">
+        <div class="tier">take</div>
+        <div class="edge good">9.9%</div>
+      </div>
+    </div>
+
   </div>
-</section>
+</div>
 
-<!-- H2H -->
-<section id="h2h-panel" class="panel">
-  <div class="section">
-    <div class="section-title">Head-to-Head History</div>
-    <div id="h2h-content"></div>
-  </div>
-</section>
-
-<script>
-function p(k){return new URLSearchParams(window.location.search).get(k)||""}
-function setText(id,val){const e=document.getElementById(id);if(e)e.textContent=(val===""||val==null)?"—":val}
-function fmt(v){return(v===""||v==null)?"—":v}
-function fmtPct(v){
-  if(v===""||v==null)return "—";
-  const n=parseFloat(String(v).replace("%",""));
-  if(isNaN(n))return v;
-  return (n<=1?n*100:n).toFixed(1)+"%";
-}
-function pct1(v){
-  const n=parseFloat(v);
-  if(isNaN(n))return null;
-  return Math.abs(n)<=1.5?n*100:n;
-}
-function num(v){
-  const n=parseFloat(v);
-  return isNaN(n)?null:n;
-}
-function setBar(fid,did,fv,dv){
-  let f=parseFloat(String(fv).replace("%",""))||0;
-  let d=parseFloat(String(dv).replace("%",""))||0;
-  if(f<=1&&d<=1){f*=100;d*=100}
-  const t=f+d,fe=document.getElementById(fid),de=document.getElementById(did);
-  if(!t){if(fe)fe.style.width="50%";if(de)de.style.width="50%";return}
-  if(fe)fe.style.width=(f/t*100).toFixed(1)+"%";
-  if(de)de.style.width=(d/t*100).toFixed(1)+"%";
-}
-function renderLast5(id,str){
-  const e=document.getElementById(id);
-  if(!e)return;
-  e.innerHTML="";
-  (str||"").trim().split(/\s+/).filter(Boolean).slice(0,5).forEach(x=>{
-    const d=document.createElement("div");
-    d.className="dot-result "+(["W","L"].includes(x)?x:"blank");
-    d.textContent=x;
-    e.appendChild(d);
-  });
-}
-function colorBadge(id,v){
-  const e=document.getElementById(id);
-  if(!e)return;
-  e.textContent=v||"—";
-  const s=(v||"").toLowerCase();
-  if(s.includes("player b")||s.includes(" b ")||s.includes("b side")||s.includes("dog"))e.className="edge-badge b";
-  else if(s.includes("player a")||s.includes(" a ")||s.includes("a side")||s.includes("fav"))e.className="edge-badge a";
-  else e.className="edge-badge neutral";
-}
-function confClass(v){
-  const n=parseFloat(v);
-  if(isNaN(n))return "low";
-  if(n>=7)return "high";
-  if(n>=4)return "mid";
-  return "low";
-}
-function setConfidence(textId,dotId,v){
-  setText(textId,v?parseFloat(v).toFixed(1)+"/10":"—");
-  const dot=document.getElementById(dotId);
-  if(dot)dot.className="conf-dot "+confClass(v);
-}
-function parsePack(raw){
-  const parts=(raw||"").split("|");
-  return{
-    pick:(parts[0]||"").trim(),
-    breakeven:pct1(parts[1]),
-    modelprob:pct1(parts[2]),
-    edge:pct1(parts[3]),
-    conf:num(parts[4]),
-    fairodds:num(parts[5])
-  };
-}
-function fmtOdds(v){
-  if(v===null||isNaN(v))return "—";
-  return(v>0?"+":"")+Math.round(v);
-}
-function tierInfo(edge){
-  if(edge===null)return{word:"—",cls:"mid"};
-  if(edge<0)return{word:"avoid",cls:"bad"};
-  if(edge<8)return{word:"lean",cls:"mid"};
-  return{word:"take",cls:"good"};
-}
-function buildEdgeRow(label,data){
-  const pick=data.pick||"No Clear Lean";
-  if(!pick||pick==="No Clear Lean"){
-    return `<div class="edge-market-row">
-      <div class="edge-market-name">${label}</div>
-      <div><div class="edge-pick">No Clear Lean</div></div>
-      <div class="edge-right"><div class="edge-tier">—</div><div class="edge-number mid">—</div></div>
-    </div>`;
-  }
-  const tier=tierInfo(data.edge);
-  const be=data.breakeven===null?"—":data.breakeven.toFixed(1)+"%";
-  const mp=data.modelprob===null?"—":data.modelprob.toFixed(1)+"%";
-  const ed=data.edge===null?"—":data.edge.toFixed(1)+"%";
-  const fair=data.fairodds===null?"—":fmtOdds(data.fairodds);
-  const conf=data.conf===null?"—":data.conf.toFixed(1);
-  return `<div class="edge-market-row">
-    <div class="edge-market-name">${label}</div>
-    <div>
-      <div class="edge-pick">${pick}</div>
-      <div class="edge-sub">Breakeven ${be} · Model ${mp} · Conf ${conf}</div>
-      <div class="fair-box">Fair odds ${fair}</div>
-    </div>
-    <div class="edge-right">
-      <div class="edge-tier">${tier.word}</div>
-      <div class="edge-number ${tier.cls}">${ed}</div>
-    </div>
-  </div>`;
-}
-const DETAIL_FEED_CSV_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vTUgynZkMlV0EmiCfbuxUoIw6C9_dHoYByxdKwWFnBoUeHUnompM-_FJ4sD_fBfVlX3PcsjhAIQVno4/pub?gid=1250538894&single=true&output=csv";
-
-function initials(name){
-  if(!name)return "??";
-  return name.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
-}
-function fmtStat(v){
-  return (v===undefined||v===null||v===""||v==="-") ? "&mdash;" : v;
-}
-function parseCSV(text){
-  const rows=[];
-  let row=[],field="",quoted=false;
-  for(let i=0;i<text.length;i++){
-    const ch=text[i],next=text[i+1];
-    if(ch==='"'){
-      if(quoted&&next==='"'){field+='"';i++}
-      else quoted=!quoted;
-    }else if(ch===","&&!quoted){row.push(field);field="";}
-    else if((ch==="\n"||ch==="\r")&&!quoted){
-      if(ch==="\r"&&next==="\n")i++;
-      row.push(field);field="";
-      if(row.some(v=>v!==""))rows.push(row);
-      row=[];
-    }else field+=ch;
-  }
-  if(field!==""||row.length){row.push(field);rows.push(row)}
-  if(!rows.length)return[];
-  const headers=rows[0].map(h=>h.trim());
-  return rows.slice(1).map(r=>{
-    const obj={};
-    headers.forEach((h,i)=>obj[h]=(r[i]||"").trim());
-    return obj;
-  });
-}
-function setH2HActive(surfaceKey){
-  document.querySelectorAll(".h2h-surface-tab").forEach(t=>{
-    t.classList.toggle("active",t.dataset.surface===surfaceKey);
-  });
-  document.querySelectorAll(".h2h-surface-panel").forEach(panel=>{
-    panel.classList.toggle("active",panel.dataset.surface===surfaceKey);
-  });
-}
-async function renderH2H(fav,dog){
-  const holder=document.getElementById("h2h-content");
-  const allTime=p("h2halltime")||"0-0";
-  const hardRec=p("h2hhard")||"0-0";
-  const clayRec=p("h2hclay")||"0-0";
-  const grassRec=p("h2hgrass")||"0-0";
-  const meetings=parseInt(p("h2hmeetings")||"0",10);
-
-  holder.innerHTML=`
-    <div class="h2h-record-card">
-      <div class="h2h-player-col"><div class="h2h-avatar a">${initials(fav)}</div><div class="h2h-player-name">${fav||"Player A"}</div></div>
-      <div class="h2h-record-mid"><div class="h2h-record-label">all-time</div><div class="h2h-record-score">${allTime}</div></div>
-      <div class="h2h-player-col"><div class="h2h-avatar b">${initials(dog)}</div><div class="h2h-player-name">${dog||"Player B"}</div></div>
-    </div>
-    <div id="h2h-dynamic"><div class="empty">Loading H2H details…</div></div>`;
-
-  const dynamic=document.getElementById("h2h-dynamic");
-  if(!fav||!dog){dynamic.innerHTML='<div class="empty">Player names are missing.</div>';return;}
-
-  let detailRows=[];
-  try{
-    const res=await fetch(DETAIL_FEED_CSV_URL,{cache:"no-store"});
-    if(!res.ok)throw new Error("HTTP "+res.status);
-    const all=parseCSV(await res.text());
-    detailRows=all.filter(r=>(r["Player"]===fav&&r["Opponent"]===dog)||(r["Player"]===dog&&r["Opponent"]===fav));
-  }catch(err){
-    console.error("Failed to load H2H detail feed",err);
-    dynamic.innerHTML='<div class="empty">H2H detail feed could not be loaded.</div>';
-    return;
-  }
-
-  if(meetings===0&&!detailRows.length){dynamic.innerHTML='<div class="empty">No H2H data.</div>';return;}
-
-  const byMatchKey={};
-  detailRows.forEach(r=>{
-    const mk=r["Match Key"]||[r["Date"],r["Tournament"],r["Surface"],r["Player"],r["Opponent"],r["Result"]].join("|");
-    if(!byMatchKey[mk])byMatchKey[mk]={};
-    byMatchKey[mk][r["Player"]]=r;
-  });
-
-  const surfaces=[{key:"Hard",rec:hardRec},{key:"Clay",rec:clayRec},{key:"Grass",rec:grassRec}];
-  let tabsHtml='<div class="h2h-tabs">';
-  let panelsHtml='<div class="h2h-panels">';
-  let firstAvailable="";
-
-  surfaces.forEach(s=>{
-    const surfaceMeetings=Object.values(byMatchKey).filter(m=>{const any=m[fav]||m[dog];return any&&any["Surface"]===s.key;});
-    const empty=surfaceMeetings.length===0;
-    if(!empty&&!firstAvailable)firstAvailable=s.key;
-    tabsHtml+=`<button class="h2h-surface-tab${empty?" empty":""}" data-surface="${s.key}" ${empty?"disabled":""}>${s.key} <span>${s.rec}</span></button>`;
-    panelsHtml+=`<div class="h2h-surface-panel" data-surface="${s.key}">`;
-    if(empty){panelsHtml+='<div class="empty">No meetings on this surface.</div>';}else{
-      surfaceMeetings.sort((m1,m2)=>{const r1=m1[fav]||m1[dog],r2=m2[fav]||m2[dog];return parseInt(r1["RecencyRankSurface"]||999,10)-parseInt(r2["RecencyRankSurface"]||999,10);});
-      surfaceMeetings.forEach((m,idx)=>{
-        const rowA=m[fav],rowB=m[dog],any=rowA||rowB,detailId=`h2h-detail-${s.key}-${idx}`;
-        panelsHtml+=`<article class="h2h-meeting-card"><button class="h2h-meeting-summary" type="button" data-target="${detailId}"><span class="h2h-meeting-meta">${any["Tournament"]||"—"} · ${any["Round"]||"—"} · ${any["Date"]||"—"}</span><span class="h2h-meeting-score">${any["Result"]||"—"} <span>⌄</span></span></button><div class="h2h-detail${idx<2?" open":""}" id="${detailId}">`;
-        if(rowA&&rowB){
-          panelsHtml+=`<table class="h2h-stat-table"><tr><th></th><th>${fav}</th><th>${dog}</th></tr><tr><td>Aces</td><td>${fmtStat(rowA["Aces"])}</td><td>${fmtStat(rowB["Aces"])}</td></tr><tr><td>DFs</td><td>${fmtStat(rowA["DFs"])}</td><td>${fmtStat(rowB["DFs"])}</td></tr><tr><td>1st serve %</td><td>${fmtStat(rowA["1st Srv Accuracy %"])}</td><td>${fmtStat(rowB["1st Srv Accuracy %"])}</td></tr><tr><td>BP saved</td><td>${fmtStat(rowA["BPs Saved"])}</td><td>${fmtStat(rowB["BPs Saved"])}</td></tr><tr><td>BP converted</td><td>${fmtStat(rowA["BPs Converted"])}</td><td>${fmtStat(rowB["BPs Converted"])}</td></tr></table>`;
-        }else{
-          const solo=rowA||rowB,soloName=rowA?fav:dog;
-          panelsHtml+=`<table class="h2h-stat-table"><tr><th></th><th>${soloName}</th></tr><tr><td>Aces</td><td>${fmtStat(solo["Aces"])}</td></tr><tr><td>DFs</td><td>${fmtStat(solo["DFs"])}</td></tr><tr><td>1st serve %</td><td>${fmtStat(solo["1st Srv Accuracy %"])}</td></tr><tr><td>BP saved</td><td>${fmtStat(solo["BPs Saved"])}</td></tr><tr><td>BP converted</td><td>${fmtStat(solo["BPs Converted"])}</td></tr></table>`;
-        }
-        panelsHtml+='</div></article>';
-      });
-    }
-    panelsHtml+='</div>';
-  });
-  tabsHtml+='</div>';panelsHtml+='</div>';dynamic.innerHTML=tabsHtml+panelsHtml;
-  document.querySelectorAll(".h2h-surface-tab:not(.empty)").forEach(btn=>btn.addEventListener("click",()=>setH2HActive(btn.dataset.surface)));
-  document.querySelectorAll(".h2h-meeting-summary").forEach(btn=>btn.addEventListener("click",()=>document.getElementById(btn.dataset.target).classList.toggle("open")));
-  if(firstAvailable)setH2HActive(firstAvailable);else dynamic.innerHTML='<div class="empty">No prior meetings found.</div>';
-}
-function setupCollapsibles(){
-  document.querySelectorAll(".mobile-collapsible .collapse-toggle").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      if(window.innerWidth>760)return;
-      const card=btn.closest(".mobile-collapsible");
-      const isCollapsed=card.classList.toggle("collapsed");
-      btn.setAttribute("aria-expanded",String(!isCollapsed));
-    });
-  });
-}
-function syncCollapsiblesForViewport(){
-  document.querySelectorAll(".mobile-collapsible").forEach(card=>{
-    const btn=card.querySelector(".collapse-toggle");
-    if(window.innerWidth>760){
-      card.classList.remove("collapsed");
-      if(btn)btn.setAttribute("aria-expanded","true");
-    }else if(!card.dataset.mobileInitialized){
-      card.classList.add("collapsed");
-      card.dataset.mobileInitialized="1";
-      if(btn)btn.setAttribute("aria-expanded","false");
-    }
-  });
-}
-
-function setupTabs(){
-  const tabs=[...document.querySelectorAll(".tab")];
-  const panels=[...document.querySelectorAll(".panel")];
-  tabs.forEach(tab=>tab.addEventListener("click",()=>{
-    tabs.forEach(t=>t.classList.remove("active"));
-    panels.forEach(panel=>panel.classList.remove("active"));
-    tab.classList.add("active");
-    document.getElementById(tab.dataset.panel).classList.add("active");
-  }));
-}
-
-window.addEventListener("DOMContentLoaded",()=>{
-  setupTabs();
-  setupCollapsibles();
-  syncCollapsiblesForViewport();
-  window.addEventListener("resize",syncCollapsiblesForViewport);
-
-  const fav=p("fav"),dog=p("dog");
-  setText("fav-name",fav);
-  setText("dog-name",dog);
-  setText("mobile-match-title",(fav||"—")+" vs "+(dog||"—"));
-  renderLast5("mobile-fav-last5",p("favlast5"));
-  renderLast5("mobile-dog-last5",p("doglast5"));
-  const mobileTournament=(p("tournament")||"").replace(/^WTA\s+/i,"");
-  document.getElementById("mobile-meta").textContent=[mobileTournament,p("surface"),p("round")].filter(Boolean).join(" • ");
-  ["tournament","round","surface","date","time"].forEach(k=>setText("chip-"+k,p(k)));
-  renderLast5("fav-last5",p("favlast5"));
-  renderLast5("dog-last5",p("doglast5"));
-
-  // Existing favwinprob/dogwinprob parameters remain the market no-vig pair.
-  const noVigFav=p("favwinprob");
-  const noVigDog=p("dogwinprob");
-  setText("v-fav-winprob",fmtPct(noVigFav));
-  setText("v-dog-winprob",fmtPct(noVigDog));
-  setBar("bar-fav-winprob","bar-dog-winprob",noVigFav,noVigDog);
-  setText("mini-fav-winprob",fav);
-  setText("mini-dog-winprob",dog);
-
-  // Derive the two-sided model pair from mlpick + mlmodelprob.
-  const modelPick=p("mlpick");
-  const modelPickedProb=num(p("mlmodelprob"));
-  let modelFav=null,modelDog=null;
-  if(modelPickedProb!==null){
-    const q=Math.abs(modelPickedProb)<=1.5?modelPickedProb:modelPickedProb/100;
-    if(modelPick.trim().toLowerCase()===fav.trim().toLowerCase()){modelFav=q;modelDog=1-q}
-    else if(modelPick.trim().toLowerCase()===dog.trim().toLowerCase()){modelDog=q;modelFav=1-q}
-  }
-  setText("v-fav-modelprob",modelFav===null?"—":fmtPct(modelFav));
-  setText("v-dog-modelprob",modelDog===null?"—":fmtPct(modelDog));
-  setBar("bar-fav-modelprob","bar-dog-modelprob",modelFav===null?0:modelFav,modelDog===null?0:modelDog);
-  setText("mini-fav-modelprob",fav);
-  setText("mini-dog-modelprob",dog);
-
-  colorBadge("b-surface",p("surfaceedge"));
-  colorBadge("b-base",p("basecontrol"));
-  colorBadge("b-serve",p("serveprofile"));
-  colorBadge("b-return",p("returnprofile"));
-  colorBadge("b-chaos",p("chaos"));
-
-  [
-    ["tpw","favtpw","dogtpw",true],
-    ["hold","favhold","doghold",true],
-    ["break","favbreak","dogbreak",true],
-    ["dr","favdr","dogdr",false],
-    ["2ndwon","fav2ndwon","dog2ndwon",true],
-    ["bpsaved","favbpsaved","dogbpsaved",true]
-  ].forEach(([id,f,d,isPct])=>{
-    setText("v-fav-"+id,isPct?fmtPct(p(f)):fmt(p(f)));
-    setText("v-dog-"+id,isPct?fmtPct(p(d)):fmt(p(d)));
-  });
-
-  setText("ml-pick",p("mlpick"));
-  const sp=(p("hasspread")||"").toLowerCase()==="no"
-    ?"Projection Only"
-    :((p("spreadside")||"")+(p("spreadline")?" "+p("spreadline"):""));
-  setText("spread-pick",sp);
-  const tp=(p("hastotal")||"").toLowerCase()==="no"
-    ?"Projection Only"
-    :((p("totaldir")||"")+(p("totalline")?" "+p("totalline"):""));
-  setText("total-pick",tp);
-
-  ["aces","bp","df"].forEach(market=>{
-    const favNameId="prop-fav-name-"+market;
-    const dogNameId="prop-dog-name-"+market;
-    setText(favNameId,fav);
-    setText(dogNameId,dog);
-  });
-
-  setText("v-fav-aces",fmt(p("favaces")));
-  setText("v-dog-aces",fmt(p("dogaces")));
-  setText("fav-ace-direction",p("favacedirection"));
-  setText("dog-ace-direction",p("dogacedirection"));
-  setConfidence("fav-ace-conf","fav-ace-dot",p("favaceconf"));
-  setConfidence("dog-ace-conf","dog-ace-dot",p("dogaceconf"));
-
-  setText("v-fav-bp",fmt(p("favbp")));
-  setText("v-dog-bp",fmt(p("dogbp")));
-  setText("fav-bp-direction",p("favbpdirection"));
-  setText("dog-bp-direction",p("dogbpdirection"));
-  setConfidence("fav-bp-conf","fav-bp-dot",p("favbpconf"));
-  setConfidence("dog-bp-conf","dog-bp-dot",p("dogbpconf"));
-
-  setText("v-fav-df",fmt(p("favdf")));
-  setText("v-dog-df",fmt(p("dogdf")));
-  setText("fav-df-direction",p("favdfdirection"));
-  setText("dog-df-direction",p("dogdfdirection"));
-  setConfidence("fav-df-conf","fav-df-dot",p("favdfconf"));
-  setConfidence("dog-df-conf","dog-df-dot",p("dogdfconf"));
-
-  const mlData={
-    pick:p("mlpick"),
-    breakeven:pct1(p("mlbreakeven")),
-    modelprob:pct1(p("mlmodelprob")),
-    edge:pct1(p("mledge")),
-    conf:num(p("mlconf")),
-    fairodds:num(p("mlfairodds"))
-  };
-  const spreadData=parsePack(p("spreadpack"));
-  const totalData=parsePack(p("totalpack"));
-  document.getElementById("edge-rows").innerHTML=
-    buildEdgeRow("ML",mlData)+
-    buildEdgeRow("Spread",spreadData)+
-    buildEdgeRow("Total",totalData);
-
-  renderH2H(fav,dog);
-});
-</script>
+<div class="note">
+  This keeps the previously approved mobile reductions for the probability section. The only new visual test here is the Edge layout: Fair Odds is promoted into the right-side card, and Breakeven / Model / Conf become a horizontal three-stat row.
+</div>
 </body>
 </html>
