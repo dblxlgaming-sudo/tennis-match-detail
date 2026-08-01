@@ -223,6 +223,16 @@ body{
   background:var(--panel2);border:1px dashed var(--line);border-radius:10px
 }
 
+
+/* integrated H2H */
+.h2h-record-card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.h2h-player-col{flex:1;text-align:center;min-width:0}.h2h-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;margin:0 auto 6px}
+.h2h-avatar.a{background:rgba(245,158,11,.18);color:var(--a);border:1px solid rgba(245,158,11,.35)}.h2h-avatar.b{background:rgba(236,72,153,.18);color:var(--b);border:1px solid rgba(236,72,153,.35)}
+.h2h-player-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.h2h-record-mid{text-align:center;padding:0 10px}.h2h-record-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}.h2h-record-score{font-size:20px;font-weight:850;margin-top:3px}
+.h2h-tabs{display:flex;gap:8px;margin-bottom:12px}.h2h-surface-tab{flex:1;border:1px solid var(--line);background:var(--panel2);color:#fff;border-radius:8px;padding:8px 5px;font-size:12px;cursor:pointer}.h2h-surface-tab span{color:var(--muted);margin-left:3px}.h2h-surface-tab.active{border-color:var(--a);background:rgba(245,158,11,.10)}.h2h-surface-tab.empty{opacity:.42;cursor:default}
+.h2h-surface-panel{display:none}.h2h-surface-panel.active{display:block}.h2h-meeting-card{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px;margin-bottom:9px}.h2h-meeting-summary{appearance:none;border:0;background:transparent;color:#fff;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0;cursor:pointer;text-align:left}.h2h-meeting-meta{font-size:11px;color:var(--muted)}.h2h-meeting-score{font-size:12px;font-weight:800;text-align:right}.h2h-detail{display:none;margin-top:10px}.h2h-detail.open{display:block}
+.h2h-stat-table{width:100%;border-collapse:collapse;font-size:12px}.h2h-stat-table th{font-weight:600;color:var(--muted);text-align:center;padding:5px 3px}.h2h-stat-table td{padding:6px 3px;border-top:1px solid var(--line2)}.h2h-stat-table td:first-child{color:var(--muted)}.h2h-stat-table td:not(:first-child){text-align:center}
+
 @media(max-width:760px){
   .overview-top,.prop-grid{grid-template-columns:1fr}
   .control-grid{grid-template-columns:1fr 1fr;gap:0 12px}
@@ -511,40 +521,120 @@ function buildEdgeRow(label,data){
     </div>
   </div>`;
 }
-function renderH2H(fav,dog){
+const DETAIL_FEED_CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vTUgynZkMlV0EmiCfbuxUoIw6C9_dHoYByxdKwWFnBoUeHUnompM-_FJ4sD_fBfVlX3PcsjhAIQVno4/pub?gid=1250538894&single=true&output=csv";
+
+function initials(name){
+  if(!name)return "??";
+  return name.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+}
+function fmtStat(v){
+  return (v===undefined||v===null||v===""||v==="-") ? "&mdash;" : v;
+}
+function parseCSV(text){
+  const rows=[];
+  let row=[],field="",quoted=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i],next=text[i+1];
+    if(ch==='"'){
+      if(quoted&&next==='"'){field+='"';i++}
+      else quoted=!quoted;
+    }else if(ch===","&&!quoted){row.push(field);field="";}
+    else if((ch==="\n"||ch==="\r")&&!quoted){
+      if(ch==="\r"&&next==="\n")i++;
+      row.push(field);field="";
+      if(row.some(v=>v!==""))rows.push(row);
+      row=[];
+    }else field+=ch;
+  }
+  if(field!==""||row.length){row.push(field);rows.push(row)}
+  if(!rows.length)return[];
+  const headers=rows[0].map(h=>h.trim());
+  return rows.slice(1).map(r=>{
+    const obj={};
+    headers.forEach((h,i)=>obj[h]=(r[i]||"").trim());
+    return obj;
+  });
+}
+function setH2HActive(surfaceKey){
+  document.querySelectorAll(".h2h-surface-tab").forEach(t=>{
+    t.classList.toggle("active",t.dataset.surface===surfaceKey);
+  });
+  document.querySelectorAll(".h2h-surface-panel").forEach(panel=>{
+    panel.classList.toggle("active",panel.dataset.surface===surfaceKey);
+  });
+}
+async function renderH2H(fav,dog){
   const holder=document.getElementById("h2h-content");
-  const raw=p("h2hpack");
-  if(!raw){
-    holder.innerHTML='<div class="empty">No H2H data connected for this match yet.</div>';
+  const allTime=p("h2halltime")||"0-0";
+  const hardRec=p("h2hhard")||"0-0";
+  const clayRec=p("h2hclay")||"0-0";
+  const grassRec=p("h2hgrass")||"0-0";
+  const meetings=parseInt(p("h2hmeetings")||"0",10);
+
+  holder.innerHTML=`
+    <div class="h2h-record-card">
+      <div class="h2h-player-col"><div class="h2h-avatar a">${initials(fav)}</div><div class="h2h-player-name">${fav||"Player A"}</div></div>
+      <div class="h2h-record-mid"><div class="h2h-record-label">all-time</div><div class="h2h-record-score">${allTime}</div></div>
+      <div class="h2h-player-col"><div class="h2h-avatar b">${initials(dog)}</div><div class="h2h-player-name">${dog||"Player B"}</div></div>
+    </div>
+    <div id="h2h-dynamic"><div class="empty">Loading H2H details…</div></div>`;
+
+  const dynamic=document.getElementById("h2h-dynamic");
+  if(!fav||!dog){dynamic.innerHTML='<div class="empty">Player names are missing.</div>';return;}
+
+  let detailRows=[];
+  try{
+    const res=await fetch(DETAIL_FEED_CSV_URL,{cache:"no-store"});
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const all=parseCSV(await res.text());
+    detailRows=all.filter(r=>(r["Player"]===fav&&r["Opponent"]===dog)||(r["Player"]===dog&&r["Opponent"]===fav));
+  }catch(err){
+    console.error("Failed to load H2H detail feed",err);
+    dynamic.innerHTML='<div class="empty">H2H detail feed could not be loaded.</div>';
     return;
   }
-  const rows=raw.split("~").map(x=>x.split("|"));
-  const valid=rows.filter(r=>r.length>=4);
-  if(!valid.length){
-    holder.innerHTML='<div class="empty">No prior meetings found.</div>';
-    return;
-  }
-  let favWins=0,dogWins=0;
-  valid.forEach(r=>{
-    const winner=(r[3]||"").toLowerCase();
-    if(winner===fav.toLowerCase())favWins++;
-    else if(winner===dog.toLowerCase())dogWins++;
+
+  if(meetings===0&&!detailRows.length){dynamic.innerHTML='<div class="empty">No H2H data.</div>';return;}
+
+  const byMatchKey={};
+  detailRows.forEach(r=>{
+    const mk=r["Match Key"]||[r["Date"],r["Tournament"],r["Surface"],r["Player"],r["Opponent"],r["Result"]].join("|");
+    if(!byMatchKey[mk])byMatchKey[mk]={};
+    byMatchKey[mk][r["Player"]]=r;
   });
-  let html=`<div class="h2h-summary">
-    <div class="h2h-stat"><div class="h2h-stat-label">Meetings</div><div class="h2h-stat-value">${valid.length}</div></div>
-    <div class="h2h-stat"><div class="h2h-stat-label">${fav}</div><div class="h2h-stat-value a-text">${favWins}</div></div>
-    <div class="h2h-stat"><div class="h2h-stat-label">${dog}</div><div class="h2h-stat-value b-text">${dogWins}</div></div>
-  </div>`;
-  valid.forEach(r=>{
-    const [date,surface,score,winner]=r;
-    const cls=winner.toLowerCase()===fav.toLowerCase()?"a-text":"b-text";
-    html+=`<div class="h2h-row">
-      <div class="h2h-meta">${date}${surface?" · "+surface:""}</div>
-      <div><div class="h2h-main">${winner} won</div><div class="h2h-score">${score}</div></div>
-      <div class="h2h-winner ${cls}">${winner}</div>
-    </div>`;
+
+  const surfaces=[{key:"Hard",rec:hardRec},{key:"Clay",rec:clayRec},{key:"Grass",rec:grassRec}];
+  let tabsHtml='<div class="h2h-tabs">';
+  let panelsHtml='<div class="h2h-panels">';
+  let firstAvailable="";
+
+  surfaces.forEach(s=>{
+    const surfaceMeetings=Object.values(byMatchKey).filter(m=>{const any=m[fav]||m[dog];return any&&any["Surface"]===s.key;});
+    const empty=surfaceMeetings.length===0;
+    if(!empty&&!firstAvailable)firstAvailable=s.key;
+    tabsHtml+=`<button class="h2h-surface-tab${empty?" empty":""}" data-surface="${s.key}" ${empty?"disabled":""}>${s.key} <span>${s.rec}</span></button>`;
+    panelsHtml+=`<div class="h2h-surface-panel" data-surface="${s.key}">`;
+    if(empty){panelsHtml+='<div class="empty">No meetings on this surface.</div>';}else{
+      surfaceMeetings.sort((m1,m2)=>{const r1=m1[fav]||m1[dog],r2=m2[fav]||m2[dog];return parseInt(r1["RecencyRankSurface"]||999,10)-parseInt(r2["RecencyRankSurface"]||999,10);});
+      surfaceMeetings.forEach((m,idx)=>{
+        const rowA=m[fav],rowB=m[dog],any=rowA||rowB,detailId=`h2h-detail-${s.key}-${idx}`;
+        panelsHtml+=`<article class="h2h-meeting-card"><button class="h2h-meeting-summary" type="button" data-target="${detailId}"><span class="h2h-meeting-meta">${any["Tournament"]||"—"} · ${any["Round"]||"—"} · ${any["Date"]||"—"}</span><span class="h2h-meeting-score">${any["Result"]||"—"} <span>⌄</span></span></button><div class="h2h-detail${idx<2?" open":""}" id="${detailId}">`;
+        if(rowA&&rowB){
+          panelsHtml+=`<table class="h2h-stat-table"><tr><th></th><th>${fav}</th><th>${dog}</th></tr><tr><td>Aces</td><td>${fmtStat(rowA["Aces"])}</td><td>${fmtStat(rowB["Aces"])}</td></tr><tr><td>DFs</td><td>${fmtStat(rowA["DFs"])}</td><td>${fmtStat(rowB["DFs"])}</td></tr><tr><td>1st serve %</td><td>${fmtStat(rowA["1st Srv Accuracy %"])}</td><td>${fmtStat(rowB["1st Srv Accuracy %"])}</td></tr><tr><td>BP saved</td><td>${fmtStat(rowA["BPs Saved"])}</td><td>${fmtStat(rowB["BPs Saved"])}</td></tr><tr><td>BP converted</td><td>${fmtStat(rowA["BPs Converted"])}</td><td>${fmtStat(rowB["BPs Converted"])}</td></tr></table>`;
+        }else{
+          const solo=rowA||rowB,soloName=rowA?fav:dog;
+          panelsHtml+=`<table class="h2h-stat-table"><tr><th></th><th>${soloName}</th></tr><tr><td>Aces</td><td>${fmtStat(solo["Aces"])}</td></tr><tr><td>DFs</td><td>${fmtStat(solo["DFs"])}</td></tr><tr><td>1st serve %</td><td>${fmtStat(solo["1st Srv Accuracy %"])}</td></tr><tr><td>BP saved</td><td>${fmtStat(solo["BPs Saved"])}</td></tr><tr><td>BP converted</td><td>${fmtStat(solo["BPs Converted"])}</td></tr></table>`;
+        }
+        panelsHtml+='</div></article>';
+      });
+    }
+    panelsHtml+='</div>';
   });
-  holder.innerHTML=html;
+  tabsHtml+='</div>';panelsHtml+='</div>';dynamic.innerHTML=tabsHtml+panelsHtml;
+  document.querySelectorAll(".h2h-surface-tab:not(.empty)").forEach(btn=>btn.addEventListener("click",()=>setH2HActive(btn.dataset.surface)));
+  document.querySelectorAll(".h2h-meeting-summary").forEach(btn=>btn.addEventListener("click",()=>document.getElementById(btn.dataset.target).classList.toggle("open")));
+  if(firstAvailable)setH2HActive(firstAvailable);else dynamic.innerHTML='<div class="empty">No prior meetings found.</div>';
 }
 function setupTabs(){
   const tabs=[...document.querySelectorAll(".tab")];
