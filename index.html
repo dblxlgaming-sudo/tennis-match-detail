@@ -237,12 +237,52 @@ body{
 .h2h-surface-panel{display:none}.h2h-surface-panel.active{display:block}.h2h-meeting-card{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px;margin-bottom:9px}.h2h-meeting-summary{appearance:none;border:0;background:transparent;color:#fff;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0;cursor:pointer;text-align:left}.h2h-meeting-meta{font-size:11px;color:var(--muted)}.h2h-meeting-score{font-size:12px;font-weight:800;text-align:right}.h2h-detail{display:none;margin-top:10px}.h2h-detail.open{display:block}
 .h2h-stat-table{width:100%;border-collapse:collapse;font-size:12px}.h2h-stat-table th{font-weight:600;color:var(--muted);text-align:center;padding:5px 3px}.h2h-stat-table td{padding:6px 3px;border-top:1px solid var(--line2)}.h2h-stat-table td:first-child{color:var(--muted)}.h2h-stat-table td:not(:first-child){text-align:center}
 
+
+/* compact mobile header */
+.mobile-header{display:none}
+.mobile-match-title{
+  font-size:15px;font-weight:850;text-align:center;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;color:#fff
+}
+.mobile-form-row{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  margin-top:8px
+}
+.mobile-form-side{display:flex;gap:4px;min-width:0}
+.mobile-meta{
+  margin-top:8px;text-align:center;color:var(--muted);font-size:11px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+
+/* mobile collapsible cards */
+.collapse-toggle{
+  width:100%;appearance:none;border:0;background:transparent;color:inherit;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:0;text-align:left;cursor:default
+}
+.collapse-toggle .card-title,.collapse-toggle .section-title{margin-bottom:0}
+.collapse-chevron{display:none;color:var(--muted);font-size:12px;transition:transform .18s ease}
+.collapse-content{display:block}
+.mobile-collapsible.collapsed .collapse-content{display:block}
+.mobile-collapsible.collapsed .collapse-chevron{transform:rotate(-90deg)}
+
 @media(max-width:760px){
+  .header{padding:11px 14px}
+  .desktop-header{display:none}
+  .mobile-header{display:block}
   .overview-top,.prop-grid{grid-template-columns:1fr}
+  .overview-top{margin:8px}
+  .overview-card,.section{padding:12px}
+  .section{margin:8px}
   .control-grid{grid-template-columns:1fr 1fr;gap:0 12px}
-  .tab{font-size:12px;padding:12px 5px}
+  .tab{font-size:12px;padding:11px 5px}
   .edge-market-row,.h2h-row{grid-template-columns:1fr}
   .edge-right,.h2h-winner{text-align:left}
+  .collapse-toggle{cursor:pointer}
+  .collapse-chevron{display:block}
+  .mobile-collapsible.collapsed .collapse-content{display:none}
+  .mobile-collapsible .card-title,.mobile-collapsible .section-title{margin-bottom:0}
+  .mobile-collapsible:not(.collapsed) .collapse-content{margin-top:10px}
 }
 @media(max-width:430px){
   .player-name{font-size:16px}
@@ -257,25 +297,36 @@ body{
 <body>
 
 <header class="header">
-  <div class="players-row">
-    <div class="player-block">
-      <div class="player-label">Player A</div>
-      <div class="player-name player-a" id="fav-name"></div>
-      <div class="last5" id="fav-last5"></div>
+  <div class="desktop-header">
+    <div class="players-row">
+      <div class="player-block">
+        <div class="player-label">Player A</div>
+        <div class="player-name player-a" id="fav-name"></div>
+        <div class="last5" id="fav-last5"></div>
+      </div>
+      <div class="vs-block">VS</div>
+      <div class="player-block right">
+        <div class="player-label">Player B</div>
+        <div class="player-name player-b" id="dog-name"></div>
+        <div class="last5 right" id="dog-last5"></div>
+      </div>
     </div>
-    <div class="vs-block">VS</div>
-    <div class="player-block right">
-      <div class="player-label">Player B</div>
-      <div class="player-name player-b" id="dog-name"></div>
-      <div class="last5 right" id="dog-last5"></div>
+    <div class="match-info">
+      <span class="info-chip" id="chip-tournament"></span>
+      <span class="info-chip" id="chip-round"></span>
+      <span class="info-chip" id="chip-surface"></span>
+      <span class="info-chip" id="chip-date"></span>
+      <span class="info-chip" id="chip-time"></span>
     </div>
   </div>
-  <div class="match-info">
-    <span class="info-chip" id="chip-tournament"></span>
-    <span class="info-chip" id="chip-round"></span>
-    <span class="info-chip" id="chip-surface"></span>
-    <span class="info-chip" id="chip-date"></span>
-    <span class="info-chip" id="chip-time"></span>
+
+  <div class="mobile-header">
+    <div class="mobile-match-title" id="mobile-match-title"></div>
+    <div class="mobile-form-row">
+      <div class="mobile-form-side" id="mobile-fav-last5"></div>
+      <div class="mobile-form-side" id="mobile-dog-last5"></div>
+    </div>
+    <div class="mobile-meta" id="mobile-meta"></div>
   </div>
 </header>
 
@@ -325,13 +376,18 @@ body{
       </div>
     </section>
 
-    <section class="overview-card">
-      <div class="card-title">Why The Model Picked This</div>
-      <div class="data-row"><span class="data-label">Surface Edge</span><span class="edge-badge neutral" id="b-surface"></span></div>
-      <div class="data-row"><span class="data-label">Base Control</span><span class="edge-badge neutral" id="b-base"></span></div>
-      <div class="data-row"><span class="data-label">Serve Profile</span><span class="edge-badge neutral" id="b-serve"></span></div>
-      <div class="data-row"><span class="data-label">Return Profile</span><span class="edge-badge neutral" id="b-return"></span></div>
-      <div class="data-row"><span class="data-label">Chaos Flag</span><span class="edge-badge neutral" id="b-chaos"></span></div>
+    <section class="overview-card mobile-collapsible collapsed" id="why-card">
+      <button class="collapse-toggle" type="button" aria-expanded="false">
+        <div class="card-title">Why The Model Picked This</div>
+        <span class="collapse-chevron">▼</span>
+      </button>
+      <div class="collapse-content">
+        <div class="data-row"><span class="data-label">Surface Edge</span><span class="edge-badge neutral" id="b-surface"></span></div>
+        <div class="data-row"><span class="data-label">Base Control</span><span class="edge-badge neutral" id="b-base"></span></div>
+        <div class="data-row"><span class="data-label">Serve Profile</span><span class="edge-badge neutral" id="b-serve"></span></div>
+        <div class="data-row"><span class="data-label">Return Profile</span><span class="edge-badge neutral" id="b-return"></span></div>
+        <div class="data-row"><span class="data-label">Chaos Flag</span><span class="edge-badge neutral" id="b-chaos"></span></div>
+      </div>
     </section>
 
     <section class="overview-card">
@@ -342,8 +398,12 @@ body{
     </section>
   </div>
 
-  <section class="section">
-    <div class="section-title">Control Stats</div>
+  <section class="section mobile-collapsible collapsed" id="control-card">
+    <button class="collapse-toggle" type="button" aria-expanded="false">
+      <div class="section-title">Control Stats</div>
+      <span class="collapse-chevron">▼</span>
+    </button>
+    <div class="collapse-content">
     <div class="control-grid">
       <div class="control-row"><span class="control-name">Total Points Won %</span><span class="control-values"><span class="a-text" id="v-fav-tpw"></span> / <span class="b-text" id="v-dog-tpw"></span></span></div>
       <div class="control-row"><span class="control-name">Hold %</span><span class="control-values"><span class="a-text" id="v-fav-hold"></span> / <span class="b-text" id="v-dog-hold"></span></span></div>
@@ -351,6 +411,7 @@ body{
       <div class="control-row"><span class="control-name">Dominance Ratio</span><span class="control-values"><span class="a-text" id="v-fav-dr"></span> / <span class="b-text" id="v-dog-dr"></span></span></div>
       <div class="control-row"><span class="control-name">Second Serve Won %</span><span class="control-values"><span class="a-text" id="v-fav-2ndwon"></span> / <span class="b-text" id="v-dog-2ndwon"></span></span></div>
       <div class="control-row"><span class="control-name">Break Points Saved</span><span class="control-values"><span class="a-text" id="v-fav-bpsaved"></span> / <span class="b-text" id="v-dog-bpsaved"></span></span></div>
+    </div>
     </div>
   </section>
 </main>
@@ -660,6 +721,30 @@ async function renderH2H(fav,dog){
   document.querySelectorAll(".h2h-meeting-summary").forEach(btn=>btn.addEventListener("click",()=>document.getElementById(btn.dataset.target).classList.toggle("open")));
   if(firstAvailable)setH2HActive(firstAvailable);else dynamic.innerHTML='<div class="empty">No prior meetings found.</div>';
 }
+function setupCollapsibles(){
+  document.querySelectorAll(".mobile-collapsible .collapse-toggle").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      if(window.innerWidth>760)return;
+      const card=btn.closest(".mobile-collapsible");
+      const isCollapsed=card.classList.toggle("collapsed");
+      btn.setAttribute("aria-expanded",String(!isCollapsed));
+    });
+  });
+}
+function syncCollapsiblesForViewport(){
+  document.querySelectorAll(".mobile-collapsible").forEach(card=>{
+    const btn=card.querySelector(".collapse-toggle");
+    if(window.innerWidth>760){
+      card.classList.remove("collapsed");
+      if(btn)btn.setAttribute("aria-expanded","true");
+    }else if(!card.dataset.mobileInitialized){
+      card.classList.add("collapsed");
+      card.dataset.mobileInitialized="1";
+      if(btn)btn.setAttribute("aria-expanded","false");
+    }
+  });
+}
+
 function setupTabs(){
   const tabs=[...document.querySelectorAll(".tab")];
   const panels=[...document.querySelectorAll(".panel")];
@@ -673,10 +758,18 @@ function setupTabs(){
 
 window.addEventListener("DOMContentLoaded",()=>{
   setupTabs();
+  setupCollapsibles();
+  syncCollapsiblesForViewport();
+  window.addEventListener("resize",syncCollapsiblesForViewport);
 
   const fav=p("fav"),dog=p("dog");
   setText("fav-name",fav);
   setText("dog-name",dog);
+  setText("mobile-match-title",(fav||"—")+" vs "+(dog||"—"));
+  renderLast5("mobile-fav-last5",p("favlast5"));
+  renderLast5("mobile-dog-last5",p("doglast5"));
+  const mobileTournament=(p("tournament")||"").replace(/^WTA\s+/i,"");
+  document.getElementById("mobile-meta").textContent=[mobileTournament,p("surface"),p("round")].filter(Boolean).join(" • ");
   ["tournament","round","surface","date","time"].forEach(k=>setText("chip-"+k,p(k)));
   renderLast5("fav-last5",p("favlast5"));
   renderLast5("dog-last5",p("doglast5"));
