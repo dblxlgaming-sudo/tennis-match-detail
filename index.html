@@ -3,68 +3,649 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Triple Threat Match Detail</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{background:#071426;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#fff;min-height:100vh}.header{background:#0d1f35;padding:16px;border-bottom:1px solid #1e3a5f}.players-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.player-block{flex:1;min-width:0}.player-block.right{text-align:right}.player-label{font-size:10px;color:#5b87c4;text-transform:uppercase;letter-spacing:1.6px;margin-bottom:5px}.player-name{font-size:18px;font-weight:800;line-height:1.15}.vs-block{font-size:12px;color:#5b87c4;padding-top:28px;flex-shrink:0}.last5{display:flex;gap:4px;margin-top:7px;flex-wrap:wrap}.last5.right{justify-content:flex-end}.dot{width:17px;height:17px;border-radius:50%;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center}.dot.W{background:#10b981}.dot.L{background:#ef4444}.dot.blank{background:#24405f}.match-info{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap}.info-chip{font-size:11px;color:#8fa3bc;background:rgba(255,255,255,.06);border-radius:20px;padding:5px 11px}.section{margin:10px;background:#0d1f35;border-radius:14px;border:1px solid #214369;padding:14px}.section-title{font-size:11px;font-weight:800;color:#5b87c4;text-transform:uppercase;letter-spacing:1.7px;margin-bottom:12px}.edge-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;gap:12px}.edge-label{font-size:13px;color:#95a6ba}.edge-badge{font-size:11px;font-weight:750;padding:5px 12px;border-radius:20px;max-width:62%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.edge-badge.fav{background:#153866;color:#74b2ff}.edge-badge.dog{background:#3b214b;color:#d8a1ff}.edge-badge.neutral{background:#1b314a;color:#a8b6c6}.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stat-card{background:#081a2e;border:1px solid #214369;border-radius:12px;padding:10px}.stat-label{font-size:9px;color:#5b87c4;text-transform:uppercase;letter-spacing:1px;text-align:center;margin-bottom:8px;min-height:22px;display:flex;align-items:center;justify-content:center}.stat-values{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.stat-val{font-size:15px;font-weight:800}.favtxt{color:#60a5fa}.dogtxt{color:#fb7185}.bar-track{height:6px;border-radius:4px;background:#1e3a5f;display:flex;overflow:hidden}.bar-fav{height:100%;background:#2563eb;border-radius:4px 0 0 4px}.bar-dog{height:100%;background:#ef4444;border-radius:0 4px 4px 0;margin-left:auto}.names-mini{display:flex;justify-content:space-between;margin-top:6px;color:#6f87a3;font-size:9px;text-transform:uppercase;gap:4px}.market-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px}.market-card{background:#0d1f35;border:1px solid #214369;border-radius:12px;padding:11px;min-height:104px}.market-label{font-size:10px;color:#5b87c4;text-transform:uppercase;letter-spacing:1.3px;margin-bottom:8px}.market-pick{font-size:14px;font-weight:800;line-height:1.18;min-height:34px;margin-bottom:8px}.market-sub{font-size:10px;color:#92a4b8;margin-bottom:6px;min-height:12px}.market-conf{font-size:12px;color:#7db5ff;margin-bottom:5px}.conf-track{height:5px;background:#1e3a5f;border-radius:3px;overflow:hidden}.conf-fill{height:100%;border-radius:3px}.badge{display:inline-block;background:#f59e0b;color:#111827;font-size:9px;font-weight:900;padding:2px 7px;border-radius:20px;margin-top:5px}.prop-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px}.prop-card{background:#0d1f35;border:1px solid #214369;border-radius:12px;padding:11px;min-height:112px}.prop-top{display:flex;justify-content:space-between;margin-bottom:6px}.prop-num{font-size:14px;font-weight:850}.prop-label{font-size:10px;color:#5b87c4;text-transform:uppercase;letter-spacing:1.2px;text-align:center;margin-bottom:8px}.prop-sub{font-size:9px;color:#92a4b8;text-align:center;margin:5px 0}.small-row{display:flex;justify-content:space-between;font-size:11px;font-weight:750;margin-top:5px}.hidden{display:none}
-/* --- Win Probability tile (added) --- */
-.winprob-values{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
-.winprob-val{font-size:26px;font-weight:850}
-.winprob-track{height:8px;position:relative}
-.winprob-marker{position:absolute;top:50%;width:12px;height:12px;background:#fff;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 3px #0d1f35}
-@media(max-width:420px){.market-grid,.prop-grid{grid-template-columns:1fr 1fr 1fr;gap:7px;margin:9px}.market-card,.prop-card{padding:10px}.market-pick{font-size:13px}.stat-grid{gap:8px}.player-name{font-size:17px}.winprob-val{font-size:22px}}
+:root{
+  --bg:#071426;
+  --panel:#0d1f35;
+  --panel2:#081a2e;
+  --line:#214369;
+  --line2:#18304b;
+  --muted:#92a4b8;
+  --label:#5b87c4;
+  --a:#F59E0B;
+  --b:#EC4899;
+  --high:#22C55E;
+  --mid:#FACC15;
+  --low:#EF4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:#fff;
+  min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.hidden{display:none!important}
+.header{
+  background:var(--panel);
+  padding:16px;
+  border-bottom:1px solid #1e3a5f;
+}
+.players-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.player-block{flex:1;min-width:0}
+.player-block.right{text-align:right}
+.player-label{
+  font-size:10px;color:var(--label);text-transform:uppercase;
+  letter-spacing:1.6px;margin-bottom:5px
+}
+.player-name{font-size:18px;font-weight:800;line-height:1.15}
+.player-a{color:var(--a)}
+.player-b{color:var(--b)}
+.vs-block{font-size:12px;color:var(--label);padding-top:28px;flex-shrink:0}
+.last5{display:flex;gap:4px;margin-top:7px;flex-wrap:wrap}
+.last5.right{justify-content:flex-end}
+.dot-result{
+  width:17px;height:17px;border-radius:50%;font-size:9px;font-weight:800;
+  display:flex;align-items:center;justify-content:center
+}
+.dot-result.W{background:#10b981}
+.dot-result.L{background:#ef4444}
+.dot-result.blank{background:#24405f}
+.match-info{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap}
+.info-chip{
+  font-size:11px;color:#8fa3bc;background:rgba(255,255,255,.06);
+  border-radius:20px;padding:5px 11px
+}
+
+/* tabs */
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  background:var(--panel2);
+  border-bottom:1px solid var(--line);
+}
+.tab{
+  appearance:none;border:0;background:transparent;color:#8fa3bc;
+  padding:14px 8px;font-size:13px;font-weight:700;cursor:pointer;
+  border-bottom:3px solid transparent;
+}
+.tab.active{color:#fff;background:var(--panel);border-bottom-color:var(--a)}
+.panel{display:none}
+.panel.active{display:block}
+
+/* shared cards */
+.section{
+  margin:10px;background:var(--panel);border-radius:14px;
+  border:1px solid var(--line);padding:14px
+}
+.section-title{
+  font-size:11px;font-weight:800;color:var(--label);
+  text-transform:uppercase;letter-spacing:1.7px;margin-bottom:12px
+}
+.overview-top{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px
+}
+.overview-card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;padding:14px;min-width:0
+}
+.card-title{
+  font-size:10px;color:var(--label);text-transform:uppercase;
+  letter-spacing:1.2px;margin-bottom:10px
+}
+
+/* win probability */
+.winprob-values{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 10px}
+.winprob-val{font-size:25px;font-weight:850}
+.bar-track{
+  height:7px;border-radius:4px;background:#1e3a5f;display:flex;overflow:hidden
+}
+.bar-a{height:100%;background:var(--a)}
+.bar-b{height:100%;background:var(--b);margin-left:auto}
+.names-mini{
+  display:flex;justify-content:space-between;margin-top:6px;
+  color:#6f87a3;font-size:9px;text-transform:uppercase;gap:4px
+}
+
+/* why + market */
+.data-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;padding:9px 0;border-bottom:1px solid var(--line2)
+}
+.data-row:last-child{border-bottom:0}
+.data-label{font-size:13px;color:#d7e0eb}
+.data-value{font-size:12px;font-weight:750;text-align:right}
+.edge-badge{
+  font-size:11px;font-weight:750;padding:5px 10px;border-radius:20px;
+  max-width:65%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.edge-badge.a{background:rgba(245,158,11,.14);color:#ffd37d;border:1px solid rgba(245,158,11,.28)}
+.edge-badge.b{background:rgba(236,72,153,.14);color:#ff9acb;border:1px solid rgba(236,72,153,.28)}
+.edge-badge.neutral{background:#1b314a;color:#a8b6c6;border:1px solid #2a4668}
+
+/* control stats: no bars */
+.control-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:0 24px
+}
+.control-row{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;padding:12px 0;border-bottom:1px solid var(--line2)
+}
+.control-row:nth-last-child(-n+2){border-bottom:0}
+.control-name{font-size:13px;color:#d7e0eb}
+.control-values{font-size:13px;font-weight:800;white-space:nowrap}
+.a-text{color:var(--a)}
+.b-text{color:var(--b)}
+
+/* props */
+.prop-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px
+}
+.prop-card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;padding:12px;min-width:0
+}
+.prop-label{
+  font-size:10px;color:var(--label);text-transform:uppercase;
+  letter-spacing:1.2px;text-align:center;margin-bottom:10px
+}
+.player-panels{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.player-panel{
+  background:var(--panel2);border:1px solid var(--line);
+  border-radius:10px;padding:10px;min-width:0
+}
+.player-panel-name{
+  font-size:9px;color:var(--muted);text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:7px
+}
+.projection{font-size:20px;font-weight:850;line-height:1}
+.projection-label{font-size:9px;color:var(--muted);margin-top:4px}
+.direction{
+  display:flex;align-items:center;gap:8px;margin-top:10px;
+  font-size:11px;font-weight:850;color:#eef2f7
+}
+.direction::before{content:"";width:4px;height:25px;border-radius:2px;flex:0 0 4px}
+.direction.a::before{background:var(--a)}
+.direction.b::before{background:var(--b)}
+.confidence{
+  display:flex;align-items:center;gap:6px;margin-top:10px;
+  font-size:10px;font-weight:750;color:#d9e2ef
+}
+.conf-dot{width:9px;height:9px;border-radius:50%;flex:0 0 9px}
+.conf-dot.high{background:var(--high)}
+.conf-dot.mid{background:var(--mid)}
+.conf-dot.low{background:var(--low)}
+
+/* edge */
+.edge-market-row{
+  display:grid;grid-template-columns:90px minmax(0,1fr) 100px;
+  gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line2)
+}
+.edge-market-row:last-child{border-bottom:0}
+.edge-market-name{font-size:11px;color:var(--label);text-transform:uppercase;letter-spacing:1px}
+.edge-pick{font-size:14px;font-weight:800}
+.edge-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.edge-right{text-align:right}
+.edge-tier{font-size:10px;color:var(--muted)}
+.edge-number{font-size:17px;font-weight:850;margin-top:2px}
+.edge-number.good{color:var(--high)}
+.edge-number.mid{color:var(--mid)}
+.edge-number.bad{color:var(--low)}
+.fair-box{
+  margin-top:8px;display:inline-block;font-size:10px;color:#cbd7e6;
+  background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:4px 7px
+}
+
+/* H2H */
+.h2h-summary{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px
+}
+.h2h-stat{
+  background:var(--panel2);border:1px solid var(--line);
+  border-radius:10px;padding:10px;text-align:center
+}
+.h2h-stat-label{
+  font-size:9px;color:var(--label);text-transform:uppercase;letter-spacing:1px
+}
+.h2h-stat-value{font-size:20px;font-weight:850;margin-top:4px}
+.h2h-row{
+  display:grid;grid-template-columns:125px minmax(0,1fr) 110px;
+  gap:10px;padding:11px 0;border-bottom:1px solid var(--line2)
+}
+.h2h-row:last-child{border-bottom:0}
+.h2h-meta{font-size:10px;color:var(--muted)}
+.h2h-main{font-size:13px;font-weight:750}
+.h2h-score{font-size:10px;color:var(--muted);margin-top:3px}
+.h2h-winner{text-align:right;font-size:12px;font-weight:800}
+.empty{
+  padding:30px 10px;text-align:center;color:var(--muted);
+  background:var(--panel2);border:1px dashed var(--line);border-radius:10px
+}
+
+@media(max-width:760px){
+  .overview-top,.prop-grid{grid-template-columns:1fr}
+  .control-grid{grid-template-columns:1fr 1fr;gap:0 12px}
+  .tab{font-size:12px;padding:12px 5px}
+  .edge-market-row,.h2h-row{grid-template-columns:1fr}
+  .edge-right,.h2h-winner{text-align:left}
+}
+@media(max-width:430px){
+  .player-name{font-size:16px}
+  .control-name{font-size:11px}
+  .control-values{font-size:11px}
+  .player-panel{padding:8px}
+  .projection{font-size:18px}
+  .direction{font-size:10px}
+}
 </style>
 </head>
 <body>
-<div class="header"><div class="players-row"><div class="player-block"><div class="player-label">Favorite</div><div class="player-name" id="fav-name"></div><div class="last5" id="fav-last5"></div></div><div class="vs-block">VS</div><div class="player-block right"><div class="player-label">Underdog</div><div class="player-name" id="dog-name"></div><div class="last5 right" id="dog-last5"></div></div></div><div class="match-info"><span class="info-chip" id="chip-tournament"></span><span class="info-chip" id="chip-round"></span><span class="info-chip" id="chip-surface"></span><span class="info-chip" id="chip-date"></span><span class="info-chip" id="chip-time"></span></div></div>
 
-<!-- Win Probability tile (added) -->
-<div class="section" id="section-winprob">
-  <div class="section-title">No-Vig Win Probability</div>
-  <div class="winprob-values">
-    <span class="winprob-val favtxt" id="v-fav-winprob"></span>
-    <span class="winprob-val dogtxt" id="v-dog-winprob"></span>
+<header class="header">
+  <div class="players-row">
+    <div class="player-block">
+      <div class="player-label">Player A</div>
+      <div class="player-name player-a" id="fav-name"></div>
+      <div class="last5" id="fav-last5"></div>
+    </div>
+    <div class="vs-block">VS</div>
+    <div class="player-block right">
+      <div class="player-label">Player B</div>
+      <div class="player-name player-b" id="dog-name"></div>
+      <div class="last5 right" id="dog-last5"></div>
+    </div>
   </div>
-  <div class="bar-track winprob-track">
-    <div class="bar-fav" id="bar-fav-winprob"></div>
-    <div class="bar-dog" id="bar-dog-winprob"></div>
-    <div class="winprob-marker" id="winprob-marker"></div>
+  <div class="match-info">
+    <span class="info-chip" id="chip-tournament"></span>
+    <span class="info-chip" id="chip-round"></span>
+    <span class="info-chip" id="chip-surface"></span>
+    <span class="info-chip" id="chip-date"></span>
+    <span class="info-chip" id="chip-time"></span>
   </div>
-  <div class="names-mini">
-    <span id="mini-fav-winprob"></span>
-    <span id="mini-dog-winprob"></span>
+</header>
+
+<nav class="tabs" aria-label="Match detail sections">
+  <button class="tab active" data-panel="overview-panel">Overview</button>
+  <button class="tab" data-panel="props-panel">Props</button>
+  <button class="tab" data-panel="edge-panel">Edge</button>
+  <button class="tab" data-panel="h2h-panel">H2H</button>
+</nav>
+
+<!-- OVERVIEW -->
+<main id="overview-panel" class="panel active">
+  <div class="overview-top">
+    <section class="overview-card">
+      <div class="card-title">Model Win Probability</div>
+      <div class="winprob-values">
+        <span class="winprob-val a-text" id="v-fav-winprob"></span>
+        <span class="winprob-val b-text" id="v-dog-winprob"></span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-a" id="bar-fav-winprob"></div>
+        <div class="bar-b" id="bar-dog-winprob"></div>
+      </div>
+      <div class="names-mini">
+        <span id="mini-fav-winprob"></span>
+        <span id="mini-dog-winprob"></span>
+      </div>
+    </section>
+
+    <section class="overview-card">
+      <div class="card-title">Why The Model Picked This</div>
+      <div class="data-row"><span class="data-label">Surface Edge</span><span class="edge-badge neutral" id="b-surface"></span></div>
+      <div class="data-row"><span class="data-label">Base Control</span><span class="edge-badge neutral" id="b-base"></span></div>
+      <div class="data-row"><span class="data-label">Serve Profile</span><span class="edge-badge neutral" id="b-serve"></span></div>
+      <div class="data-row"><span class="data-label">Return Profile</span><span class="edge-badge neutral" id="b-return"></span></div>
+      <div class="data-row"><span class="data-label">Chaos Flag</span><span class="edge-badge neutral" id="b-chaos"></span></div>
+    </section>
+
+    <section class="overview-card">
+      <div class="card-title">Market Calls</div>
+      <div class="data-row"><span class="data-label">ML</span><span class="data-value" id="ml-pick"></span></div>
+      <div class="data-row"><span class="data-label">Spread</span><span class="data-value" id="spread-pick"></span></div>
+      <div class="data-row"><span class="data-label">Total</span><span class="data-value" id="total-pick"></span></div>
+    </section>
   </div>
-</div>
 
-<div class="section"><div class="section-title">Why The Model Picked This</div><div class="edge-row"><div class="edge-label">Surface Edge</div><div class="edge-badge neutral" id="b-surface"></div></div><div class="edge-row"><div class="edge-label">Base Control</div><div class="edge-badge neutral" id="b-base"></div></div><div class="edge-row"><div class="edge-label">Serve Profile</div><div class="edge-badge neutral" id="b-serve"></div></div><div class="edge-row"><div class="edge-label">Return Profile</div><div class="edge-badge neutral" id="b-return"></div></div><div class="edge-row"><div class="edge-label">Chaos Flag</div><div class="edge-badge neutral" id="b-chaos"></div></div></div>
+  <section class="section">
+    <div class="section-title">Control Stats</div>
+    <div class="control-grid">
+      <div class="control-row"><span class="control-name">Total Points Won %</span><span class="control-values"><span class="a-text" id="v-fav-tpw"></span> / <span class="b-text" id="v-dog-tpw"></span></span></div>
+      <div class="control-row"><span class="control-name">Hold %</span><span class="control-values"><span class="a-text" id="v-fav-hold"></span> / <span class="b-text" id="v-dog-hold"></span></span></div>
+      <div class="control-row"><span class="control-name">Break %</span><span class="control-values"><span class="a-text" id="v-fav-break"></span> / <span class="b-text" id="v-dog-break"></span></span></div>
+      <div class="control-row"><span class="control-name">Dominance Ratio</span><span class="control-values"><span class="a-text" id="v-fav-dr"></span> / <span class="b-text" id="v-dog-dr"></span></span></div>
+      <div class="control-row"><span class="control-name">Second Serve Won %</span><span class="control-values"><span class="a-text" id="v-fav-2ndwon"></span> / <span class="b-text" id="v-dog-2ndwon"></span></span></div>
+      <div class="control-row"><span class="control-name">Break Points Saved</span><span class="control-values"><span class="a-text" id="v-fav-bpsaved"></span> / <span class="b-text" id="v-dog-bpsaved"></span></span></div>
+    </div>
+  </section>
+</main>
 
-<div class="section"><div class="section-title">Control Stats</div><div class="stat-grid">
-<div class="stat-card"><div class="stat-label">Total Points Won %</div><div class="stat-values"><span class="stat-val favtxt" id="v-fav-tpw"></span><span class="stat-val dogtxt" id="v-dog-tpw"></span></div><div class="bar-track"><div class="bar-fav" id="bar-fav-tpw"></div><div class="bar-dog" id="bar-dog-tpw"></div></div><div class="names-mini"><span id="mini-fav-1"></span><span id="mini-dog-1"></span></div></div>
-<div class="stat-card"><div class="stat-label">Hold %</div><div class="stat-values"><span class="stat-val favtxt" id="v-fav-hold"></span><span class="stat-val dogtxt" id="v-dog-hold"></span></div><div class="bar-track"><div class="bar-fav" id="bar-fav-hold"></div><div class="bar-dog" id="bar-dog-hold"></div></div><div class="names-mini"><span id="mini-fav-2"></span><span id="mini-dog-2"></span></div></div>
-<div class="stat-card"><div class="stat-label">Break %</div><div class="stat-values"><span class="stat-val favtxt" id="v-fav-break"></span><span class="stat-val dogtxt" id="v-dog-break"></span></div><div class="bar-track"><div class="bar-fav" id="bar-fav-break"></div><div class="bar-dog" id="bar-dog-break"></div></div><div class="names-mini"><span id="mini-fav-3"></span><span id="mini-dog-3"></span></div></div>
-<div class="stat-card"><div class="stat-label">Dominance Ratio</div><div class="stat-values"><span class="stat-val favtxt" id="v-fav-dr"></span><span class="stat-val dogtxt" id="v-dog-dr"></span></div><div class="bar-track"><div class="bar-fav" id="bar-fav-dr"></div><div class="bar-dog" id="bar-dog-dr"></div></div><div class="names-mini"><span id="mini-fav-4"></span><span id="mini-dog-4"></span></div></div>
-<div class="stat-card"><div class="stat-label">Second Serve Won %</div><div class="stat-values"><span class="stat-val favtxt" id="v-fav-2ndwon"></span><span class="stat-val dogtxt" id="v-dog-2ndwon"></span></div><div class="bar-track"><div class="bar-fav" id="bar-fav-2ndwon"></div><div class="bar-dog" id="bar-dog-2ndwon"></div></div><div class="names-mini"><span id="mini-fav-5"></span><span id="mini-dog-5"></span></div></div>
-<div class="stat-card"><div class="stat-label">Break Points Saved</div><div class="stat-values"><span class="stat-val favtxt" id="v-fav-bpsaved"></span><span class="stat-val dogtxt" id="v-dog-bpsaved"></span></div><div class="bar-track"><div class="bar-fav" id="bar-fav-bpsaved"></div><div class="bar-dog" id="bar-dog-bpsaved"></div></div><div class="names-mini"><span id="mini-fav-6"></span><span id="mini-dog-6"></span></div></div>
-</div></div>
+<!-- PROPS -->
+<section id="props-panel" class="panel">
+  <div class="prop-grid">
+    <article class="prop-card">
+      <div class="prop-label">Aces</div>
+      <div class="player-panels">
+        <div class="player-panel">
+          <div class="player-panel-name" id="prop-fav-name-aces"></div>
+          <div class="projection a-text" id="v-fav-aces"></div>
+          <div class="projection-label">Projected Aces</div>
+          <div class="direction a" id="fav-ace-direction"></div>
+          <div class="confidence"><span class="conf-dot" id="fav-ace-dot"></span><span id="fav-ace-conf"></span></div>
+        </div>
+        <div class="player-panel">
+          <div class="player-panel-name" id="prop-dog-name-aces"></div>
+          <div class="projection b-text" id="v-dog-aces"></div>
+          <div class="projection-label">Projected Aces</div>
+          <div class="direction b" id="dog-ace-direction"></div>
+          <div class="confidence"><span class="conf-dot" id="dog-ace-dot"></span><span id="dog-ace-conf"></span></div>
+        </div>
+      </div>
+    </article>
 
-<div class="market-grid"><div class="market-card"><div class="market-label">ML</div><div class="market-pick" id="ml-pick"></div><div class="market-conf" id="ml-conf"></div><div class="conf-track"><div class="conf-fill" id="ml-bar" style="background:#2563eb"></div></div><div id="underdog-wrap"></div></div><div class="market-card"><div class="market-label">Spread</div><div class="market-pick" id="spread-pick"></div><div class="market-conf" id="spread-conf"></div><div class="conf-track"><div class="conf-fill" id="spread-bar" style="background:#8b5cf6"></div></div></div><div class="market-card"><div class="market-label">Total</div><div class="market-pick" id="total-pick"></div><div class="market-conf" id="total-conf"></div><div class="conf-track"><div class="conf-fill" id="total-bar" style="background:#10b981"></div></div></div></div>
+    <article class="prop-card">
+      <div class="prop-label">Break Points Won</div>
+      <div class="player-panels">
+        <div class="player-panel">
+          <div class="player-panel-name" id="prop-fav-name-bp"></div>
+          <div class="projection a-text" id="v-fav-bp"></div>
+          <div class="projection-label">Projected BP Won</div>
+          <div class="direction a" id="fav-bp-direction"></div>
+          <div class="confidence"><span class="conf-dot" id="fav-bp-dot"></span><span id="fav-bp-conf"></span></div>
+        </div>
+        <div class="player-panel">
+          <div class="player-panel-name" id="prop-dog-name-bp"></div>
+          <div class="projection b-text" id="v-dog-bp"></div>
+          <div class="projection-label">Projected BP Won</div>
+          <div class="direction b" id="dog-bp-direction"></div>
+          <div class="confidence"><span class="conf-dot" id="dog-bp-dot"></span><span id="dog-bp-conf"></span></div>
+        </div>
+      </div>
+    </article>
 
-<div class="prop-grid"><div class="prop-card"><div class="prop-label">Aces</div><div class="prop-top"><span class="prop-num favtxt" id="v-fav-aces"></span><span class="prop-num dogtxt" id="v-dog-aces"></span></div><div class="bar-track"><div class="bar-fav" id="bar-fav-aces"></div><div class="bar-dog" id="bar-dog-aces"></div></div><div class="prop-sub">Projection</div><div class="small-row"><span class="favtxt" id="fav-ace-conf"></span><span class="dogtxt" id="dog-ace-conf"></span></div><div class="conf-track"><div class="conf-fill" id="fav-ace-bar" style="background:#2563eb"></div></div><div class="conf-track" style="margin-top:4px"><div class="conf-fill" id="dog-ace-bar" style="background:#ef4444"></div></div></div><div class="prop-card"><div class="prop-label">Break Pts</div><div class="prop-top"><span class="prop-num favtxt" id="v-fav-bp"></span><span class="prop-num dogtxt" id="v-dog-bp"></span></div><div class="bar-track"><div class="bar-fav" id="bar-fav-bp"></div><div class="bar-dog" id="bar-dog-bp"></div></div><div class="prop-sub">Projection</div><div class="small-row"><span class="favtxt" id="fav-bp-conf"></span><span class="dogtxt" id="dog-bp-conf"></span></div><div class="conf-track"><div class="conf-fill" id="fav-bp-bar" style="background:#2563eb"></div></div><div class="conf-track" style="margin-top:4px"><div class="conf-fill" id="dog-bp-bar" style="background:#ef4444"></div></div></div><div class="prop-card"><div class="prop-label">Dbl Faults</div><div class="prop-top"><span class="prop-num favtxt" id="v-fav-df"></span><span class="prop-num dogtxt" id="v-dog-df"></span></div><div class="bar-track"><div class="bar-fav" id="bar-fav-df"></div><div class="bar-dog" id="bar-dog-df"></div></div><div class="prop-sub">Projection</div><div class="small-row"><span class="favtxt" id="fav-df-conf"></span><span class="dogtxt" id="dog-df-conf"></span></div><div class="conf-track"><div class="conf-fill" id="fav-df-bar" style="background:#2563eb"></div></div><div class="conf-track" style="margin-top:4px"><div class="conf-fill" id="dog-df-bar" style="background:#ef4444"></div></div></div></div><div style="height:22px"></div>
+    <article class="prop-card">
+      <div class="prop-label">Double Faults</div>
+      <div class="player-panels">
+        <div class="player-panel">
+          <div class="player-panel-name" id="prop-fav-name-df"></div>
+          <div class="projection a-text" id="v-fav-df"></div>
+          <div class="projection-label">Projected Double Faults</div>
+          <div class="direction a" id="fav-df-direction"></div>
+          <div class="confidence"><span class="conf-dot" id="fav-df-dot"></span><span id="fav-df-conf"></span></div>
+        </div>
+        <div class="player-panel">
+          <div class="player-panel-name" id="prop-dog-name-df"></div>
+          <div class="projection b-text" id="v-dog-df"></div>
+          <div class="projection-label">Projected Double Faults</div>
+          <div class="direction b" id="dog-df-direction"></div>
+          <div class="confidence"><span class="conf-dot" id="dog-df-dot"></span><span id="dog-df-conf"></span></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- EDGE -->
+<section id="edge-panel" class="panel">
+  <div class="section">
+    <div class="section-title">Breakeven Edge View</div>
+    <div id="edge-rows"></div>
+  </div>
+</section>
+
+<!-- H2H -->
+<section id="h2h-panel" class="panel">
+  <div class="section">
+    <div class="section-title">Head-to-Head History</div>
+    <div id="h2h-content"></div>
+  </div>
+</section>
 
 <script>
-function p(k){return new URLSearchParams(window.location.search).get(k)||''}function setText(id,val){const e=document.getElementById(id);if(e)e.textContent=val||'—'}function num(v){const n=parseFloat(String(v).replace('%',''));return isNaN(n)?0:(n>1?n/100:n)}function fmtPct(v){if(v===''||v==null)return '—';const n=parseFloat(String(v).replace('%',''));if(isNaN(n))return v;return (n<=1?n*100:n).toFixed(1)+'%'}function fmt(v){return(v===''||v==null)?'—':v}function setBar(fid,did,fv,dv){let f=parseFloat(String(fv).replace('%',''))||0,d=parseFloat(String(dv).replace('%',''))||0;if(f<=1&&d<=1){f*=100;d*=100}const t=f+d,fe=document.getElementById(fid),de=document.getElementById(did);if(!t){if(fe)fe.style.width='50%';if(de)de.style.width='50%';return}if(fe)fe.style.width=(f/t*100).toFixed(1)+'%';if(de)de.style.width=(d/t*100).toFixed(1)+'%'}function setConf(id,v){const e=document.getElementById(id);if(e)e.style.width=Math.max(0,Math.min(100,(parseFloat(v)||0)*10))+'%'}function renderLast5(id,str){const e=document.getElementById(id);if(!e)return;(str||'').trim().split(/\s+/).filter(Boolean).slice(0,5).forEach(x=>{const d=document.createElement('div');d.className='dot '+(['W','L'].includes(x)?x:'blank');d.textContent=x;e.appendChild(d)})}function colorBadge(id,v){const e=document.getElementById(id);if(!e)return;e.textContent=v||'—';const s=(v||'').toLowerCase();if(s.includes('player b')||s.includes(' b ')||s.includes('b side')||s.includes('dog'))e.className='edge-badge dog';else if(s.includes('player a')||s.includes(' a ')||s.includes('a side')||s.includes('fav'))e.className='edge-badge fav';else e.className='edge-badge neutral'}
-window.addEventListener('DOMContentLoaded',()=>{const fav=p('fav'),dog=p('dog');setText('fav-name',fav);setText('dog-name',dog);['1','2','3','4','5','6'].forEach(i=>{setText('mini-fav-'+i,fav);setText('mini-dog-'+i,dog)});['tournament','round','surface','date','time'].forEach(k=>setText('chip-'+k,p(k)));renderLast5('fav-last5',p('favlast5'));renderLast5('dog-last5',p('doglast5'));colorBadge('b-surface',p('surfaceedge'));colorBadge('b-base',p('basecontrol'));colorBadge('b-serve',p('serveprofile'));colorBadge('b-return',p('returnprofile'));colorBadge('b-chaos',p('chaos'));
-[['tpw','favtpw','dogtpw',true],['hold','favhold','doghold',true],['break','favbreak','dogbreak',true],['dr','favdr','dogdr',false],['2ndwon','fav2ndwon','dog2ndwon',true],['bpsaved','favbpsaved','dogbpsaved',true]].forEach(([id,f,d,pct])=>{setText('v-fav-'+id,pct?fmtPct(p(f)):fmt(p(f)));setText('v-dog-'+id,pct?fmtPct(p(d)):fmt(p(d)));setBar('bar-fav-'+id,'bar-dog-'+id,p(f),p(d))});
-/* Win Probability tile (added) — uses favwinprob / dogwinprob URL params, mapped in Glide to
-   display!Fav Win Probability% and display!Dog Win Probability% (the No-Vig columns) */
-setText('v-fav-winprob',fmtPct(p('favwinprob')));
-setText('v-dog-winprob',fmtPct(p('dogwinprob')));
-setBar('bar-fav-winprob','bar-dog-winprob',p('favwinprob'),p('dogwinprob'));
-setText('mini-fav-winprob',fav);
-setText('mini-dog-winprob',dog);
-(function(){let fv=parseFloat(String(p('favwinprob')).replace('%',''))||50;if(fv<=1)fv*=100;const m=document.getElementById('winprob-marker');if(m)m.style.left=fv.toFixed(1)+'%'})();
-setText('ml-pick',p('mlpick'));setText('ml-conf',p('mlconf')?p('mlconf')+'/10':'—');setConf('ml-bar',p('mlconf'));if(p('isunderdog').toLowerCase()==='true')document.getElementById('underdog-wrap').innerHTML='<span class="badge">UNDERDOG PICK</span>';
-const sp=(p('hasspread')||'').toLowerCase()==='no'?'Projection Only':((p('spreadside')||'')+(p('spreadline')?' '+p('spreadline'):''));setText('spread-pick',sp);setText('spread-conf',p('spreadconf')?p('spreadconf')+'/10':'—');setConf('spread-bar',p('spreadconf'));
-const tp=(p('hastotal')||'').toLowerCase()==='no'?'Projection Only':((p('totaldir')||'')+(p('totalline')?' '+p('totalline'):''));setText('total-pick',tp);setText('total-conf',p('totalconf')?p('totalconf')+'/10':'—');setConf('total-bar',p('totalconf'));
-[['aces','favaces','dogaces','favaceconf','dogaceconf','ace'],['bp','favbp','dogbp','favbpconf','dogbpconf','bp'],['df','favdf','dogdf','favdfconf','dogdfconf','df']].forEach(([id,f,d,fc,dc,key])=>{setText('v-fav-'+id,fmt(p(f)));setText('v-dog-'+id,fmt(p(d)));setBar('bar-fav-'+id,'bar-dog-'+id,p(f),p(d));setText('fav-'+key+'-conf',p(fc)?p(fc)+'/10':'—');setText('dog-'+key+'-conf',p(dc)?p(dc)+'/10':'—');setConf('fav-'+key+'-bar',p(fc));setConf('dog-'+key+'-bar',p(dc))})});
+function p(k){return new URLSearchParams(window.location.search).get(k)||""}
+function setText(id,val){const e=document.getElementById(id);if(e)e.textContent=(val===""||val==null)?"—":val}
+function fmt(v){return(v===""||v==null)?"—":v}
+function fmtPct(v){
+  if(v===""||v==null)return "—";
+  const n=parseFloat(String(v).replace("%",""));
+  if(isNaN(n))return v;
+  return (n<=1?n*100:n).toFixed(1)+"%";
+}
+function pct1(v){
+  const n=parseFloat(v);
+  if(isNaN(n))return null;
+  return Math.abs(n)<=1.5?n*100:n;
+}
+function num(v){
+  const n=parseFloat(v);
+  return isNaN(n)?null:n;
+}
+function setBar(fid,did,fv,dv){
+  let f=parseFloat(String(fv).replace("%",""))||0;
+  let d=parseFloat(String(dv).replace("%",""))||0;
+  if(f<=1&&d<=1){f*=100;d*=100}
+  const t=f+d,fe=document.getElementById(fid),de=document.getElementById(did);
+  if(!t){if(fe)fe.style.width="50%";if(de)de.style.width="50%";return}
+  if(fe)fe.style.width=(f/t*100).toFixed(1)+"%";
+  if(de)de.style.width=(d/t*100).toFixed(1)+"%";
+}
+function renderLast5(id,str){
+  const e=document.getElementById(id);
+  if(!e)return;
+  e.innerHTML="";
+  (str||"").trim().split(/\s+/).filter(Boolean).slice(0,5).forEach(x=>{
+    const d=document.createElement("div");
+    d.className="dot-result "+(["W","L"].includes(x)?x:"blank");
+    d.textContent=x;
+    e.appendChild(d);
+  });
+}
+function colorBadge(id,v){
+  const e=document.getElementById(id);
+  if(!e)return;
+  e.textContent=v||"—";
+  const s=(v||"").toLowerCase();
+  if(s.includes("player b")||s.includes(" b ")||s.includes("b side")||s.includes("dog"))e.className="edge-badge b";
+  else if(s.includes("player a")||s.includes(" a ")||s.includes("a side")||s.includes("fav"))e.className="edge-badge a";
+  else e.className="edge-badge neutral";
+}
+function confClass(v){
+  const n=parseFloat(v);
+  if(isNaN(n))return "low";
+  if(n>=7)return "high";
+  if(n>=4)return "mid";
+  return "low";
+}
+function setConfidence(textId,dotId,v){
+  setText(textId,v?parseFloat(v).toFixed(1)+"/10":"—");
+  const dot=document.getElementById(dotId);
+  if(dot)dot.className="conf-dot "+confClass(v);
+}
+function parsePack(raw){
+  const parts=(raw||"").split("|");
+  return{
+    pick:(parts[0]||"").trim(),
+    breakeven:pct1(parts[1]),
+    modelprob:pct1(parts[2]),
+    edge:pct1(parts[3]),
+    conf:num(parts[4]),
+    fairodds:num(parts[5])
+  };
+}
+function fmtOdds(v){
+  if(v===null||isNaN(v))return "—";
+  return(v>0?"+":"")+Math.round(v);
+}
+function tierInfo(edge){
+  if(edge===null)return{word:"—",cls:"mid"};
+  if(edge<0)return{word:"avoid",cls:"bad"};
+  if(edge<8)return{word:"lean",cls:"mid"};
+  return{word:"take",cls:"good"};
+}
+function buildEdgeRow(label,data){
+  const pick=data.pick||"No Clear Lean";
+  if(!pick||pick==="No Clear Lean"){
+    return `<div class="edge-market-row">
+      <div class="edge-market-name">${label}</div>
+      <div><div class="edge-pick">No Clear Lean</div></div>
+      <div class="edge-right"><div class="edge-tier">—</div><div class="edge-number mid">—</div></div>
+    </div>`;
+  }
+  const tier=tierInfo(data.edge);
+  const be=data.breakeven===null?"—":data.breakeven.toFixed(1)+"%";
+  const mp=data.modelprob===null?"—":data.modelprob.toFixed(1)+"%";
+  const ed=data.edge===null?"—":data.edge.toFixed(1)+"%";
+  const fair=data.fairodds===null?"—":fmtOdds(data.fairodds);
+  const conf=data.conf===null?"—":data.conf.toFixed(1);
+  return `<div class="edge-market-row">
+    <div class="edge-market-name">${label}</div>
+    <div>
+      <div class="edge-pick">${pick}</div>
+      <div class="edge-sub">Breakeven ${be} · Model ${mp} · Conf ${conf}</div>
+      <div class="fair-box">Fair odds ${fair}</div>
+    </div>
+    <div class="edge-right">
+      <div class="edge-tier">${tier.word}</div>
+      <div class="edge-number ${tier.cls}">${ed}</div>
+    </div>
+  </div>`;
+}
+function renderH2H(fav,dog){
+  const holder=document.getElementById("h2h-content");
+  const raw=p("h2hpack");
+  if(!raw){
+    holder.innerHTML='<div class="empty">No H2H data connected for this match yet.</div>';
+    return;
+  }
+  const rows=raw.split("~").map(x=>x.split("|"));
+  const valid=rows.filter(r=>r.length>=4);
+  if(!valid.length){
+    holder.innerHTML='<div class="empty">No prior meetings found.</div>';
+    return;
+  }
+  let favWins=0,dogWins=0;
+  valid.forEach(r=>{
+    const winner=(r[3]||"").toLowerCase();
+    if(winner===fav.toLowerCase())favWins++;
+    else if(winner===dog.toLowerCase())dogWins++;
+  });
+  let html=`<div class="h2h-summary">
+    <div class="h2h-stat"><div class="h2h-stat-label">Meetings</div><div class="h2h-stat-value">${valid.length}</div></div>
+    <div class="h2h-stat"><div class="h2h-stat-label">${fav}</div><div class="h2h-stat-value a-text">${favWins}</div></div>
+    <div class="h2h-stat"><div class="h2h-stat-label">${dog}</div><div class="h2h-stat-value b-text">${dogWins}</div></div>
+  </div>`;
+  valid.forEach(r=>{
+    const [date,surface,score,winner]=r;
+    const cls=winner.toLowerCase()===fav.toLowerCase()?"a-text":"b-text";
+    html+=`<div class="h2h-row">
+      <div class="h2h-meta">${date}${surface?" · "+surface:""}</div>
+      <div><div class="h2h-main">${winner} won</div><div class="h2h-score">${score}</div></div>
+      <div class="h2h-winner ${cls}">${winner}</div>
+    </div>`;
+  });
+  holder.innerHTML=html;
+}
+function setupTabs(){
+  const tabs=[...document.querySelectorAll(".tab")];
+  const panels=[...document.querySelectorAll(".panel")];
+  tabs.forEach(tab=>tab.addEventListener("click",()=>{
+    tabs.forEach(t=>t.classList.remove("active"));
+    panels.forEach(panel=>panel.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.panel).classList.add("active");
+  }));
+}
+
+window.addEventListener("DOMContentLoaded",()=>{
+  setupTabs();
+
+  const fav=p("fav"),dog=p("dog");
+  setText("fav-name",fav);
+  setText("dog-name",dog);
+  ["tournament","round","surface","date","time"].forEach(k=>setText("chip-"+k,p(k)));
+  renderLast5("fav-last5",p("favlast5"));
+  renderLast5("dog-last5",p("doglast5"));
+
+  setText("v-fav-winprob",fmtPct(p("favwinprob")));
+  setText("v-dog-winprob",fmtPct(p("dogwinprob")));
+  setBar("bar-fav-winprob","bar-dog-winprob",p("favwinprob"),p("dogwinprob"));
+  setText("mini-fav-winprob",fav);
+  setText("mini-dog-winprob",dog);
+
+  colorBadge("b-surface",p("surfaceedge"));
+  colorBadge("b-base",p("basecontrol"));
+  colorBadge("b-serve",p("serveprofile"));
+  colorBadge("b-return",p("returnprofile"));
+  colorBadge("b-chaos",p("chaos"));
+
+  [
+    ["tpw","favtpw","dogtpw",true],
+    ["hold","favhold","doghold",true],
+    ["break","favbreak","dogbreak",true],
+    ["dr","favdr","dogdr",false],
+    ["2ndwon","fav2ndwon","dog2ndwon",true],
+    ["bpsaved","favbpsaved","dogbpsaved",true]
+  ].forEach(([id,f,d,isPct])=>{
+    setText("v-fav-"+id,isPct?fmtPct(p(f)):fmt(p(f)));
+    setText("v-dog-"+id,isPct?fmtPct(p(d)):fmt(p(d)));
+  });
+
+  setText("ml-pick",p("mlpick"));
+  const sp=(p("hasspread")||"").toLowerCase()==="no"
+    ?"Projection Only"
+    :((p("spreadside")||"")+(p("spreadline")?" "+p("spreadline"):""));
+  setText("spread-pick",sp);
+  const tp=(p("hastotal")||"").toLowerCase()==="no"
+    ?"Projection Only"
+    :((p("totaldir")||"")+(p("totalline")?" "+p("totalline"):""));
+  setText("total-pick",tp);
+
+  ["aces","bp","df"].forEach(market=>{
+    const favNameId="prop-fav-name-"+market;
+    const dogNameId="prop-dog-name-"+market;
+    setText(favNameId,fav);
+    setText(dogNameId,dog);
+  });
+
+  setText("v-fav-aces",fmt(p("favaces")));
+  setText("v-dog-aces",fmt(p("dogaces")));
+  setText("fav-ace-direction",p("favacedirection"));
+  setText("dog-ace-direction",p("dogacedirection"));
+  setConfidence("fav-ace-conf","fav-ace-dot",p("favaceconf"));
+  setConfidence("dog-ace-conf","dog-ace-dot",p("dogaceconf"));
+
+  setText("v-fav-bp",fmt(p("favbp")));
+  setText("v-dog-bp",fmt(p("dogbp")));
+  setText("fav-bp-direction",p("favbpdirection"));
+  setText("dog-bp-direction",p("dogbpdirection"));
+  setConfidence("fav-bp-conf","fav-bp-dot",p("favbpconf"));
+  setConfidence("dog-bp-conf","dog-bp-dot",p("dogbpconf"));
+
+  setText("v-fav-df",fmt(p("favdf")));
+  setText("v-dog-df",fmt(p("dogdf")));
+  setText("fav-df-direction",p("favdfdirection"));
+  setText("dog-df-direction",p("dogdfdirection"));
+  setConfidence("fav-df-conf","fav-df-dot",p("favdfconf"));
+  setConfidence("dog-df-conf","dog-df-dot",p("dogdfconf"));
+
+  const mlData={
+    pick:p("mlpick"),
+    breakeven:pct1(p("mlbreakeven")),
+    modelprob:pct1(p("mlmodelprob")),
+    edge:pct1(p("mledge")),
+    conf:num(p("mlconf")),
+    fairodds:num(p("mlfairodds"))
+  };
+  const spreadData=parsePack(p("spreadpack"));
+  const totalData=parsePack(p("totalpack"));
+  document.getElementById("edge-rows").innerHTML=
+    buildEdgeRow("ML",mlData)+
+    buildEdgeRow("Spread",spreadData)+
+    buildEdgeRow("Total",totalData);
+
+  renderH2H(fav,dog);
+});
 </script>
 </body>
 </html>
